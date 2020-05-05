@@ -19,18 +19,21 @@ const connections = [
 
 const App = () => {
   const [data, setData] = useState(connections);
+  const [collapsed, setCollapsed] = useState([]);
 
-  const handleClick = useCallback((id) => {
-    setData((state) =>
-      state.map((item) =>
-        item.name === id ? { ...item, collapsed: !item.collapsed } : item
-      )
-    );
-  }, []);
+  const handleClick = useCallback(
+    (id) =>
+      setCollapsed((state) =>
+        state.includes(id)
+          ? state.filter((item) => item !== id)
+          : state.concat(id)
+      ),
+    [setCollapsed]
+  );
 
   return (
     <div className="App">
-      <Hierarchy data={data} onClick={handleClick} />
+      <Hierarchy data={data} collapsed={collapsed} onClick={handleClick} />
     </div>
   );
 };

@@ -10,7 +10,8 @@ const stratifier = stratify()
 
 const colors = ["#4c4d99", "#f71a7e", "#6f4f6e", "#9fc3d4"];
 
-const Link = ({ element, dx, dy }) => {
+/** @param {{element, dx:number, dy:number, collapsed: string[] }} props*/
+const Link = ({ element, dx, dy, collapsed }) => {
   const { x, y } = element;
   const { x: parentX, y: parentY } = element.parent
     ? element.parent
@@ -49,11 +50,12 @@ const Link = ({ element, dx, dy }) => {
         />
       )}
       {element.children &&
-        !element.data.data.collapsed &&
+        !collapsed.includes(element.data.id) &&
         element.children.map((child) => (
           <Link
             dx={dx}
             dy={dy}
+            collapsed={collapsed}
             element={child}
             key={`${element.data.data.name}-${child.data.data.name}-link`}
           />
@@ -62,8 +64,8 @@ const Link = ({ element, dx, dy }) => {
   );
 };
 
-/** @param {{element, onClick: (e)=>void, dx:number, dy:number }} props*/
-const Box = ({ element, onClick, dx, dy }) => {
+/** @param {{element, onClick: (e)=>void, dx:number, dy:number, collapsed: string[] }} props*/
+const Box = ({ element, onClick, dx, dy, collapsed }) => {
   const handleClick = useCallback(() => onClick(element.data.id), [
     element,
     onClick,
@@ -93,12 +95,13 @@ const Box = ({ element, onClick, dx, dy }) => {
         </text>
       </g>
       {element.children &&
-        !element.data.data.collapsed &&
+        !collapsed.includes(element.data.id) &&
         element.children.map((child) => (
           <Box
             dx={dx}
             dy={dy}
             element={child}
+            collapsed={collapsed}
             key={`${element.data.data.name}-${child.data.data.name}`}
             onClick={onClick}
           />
@@ -107,7 +110,8 @@ const Box = ({ element, onClick, dx, dy }) => {
   );
 };
 
-const Hierarchy = ({ data, onClick }) => {
+/** @param {{data: any, onClick: (e)=>void, collapsed: string[] }} props*/
+const Hierarchy = ({ data, onClick, collapsed }) => {
   const dx = 150;
   const dy = 100;
   const root = useMemo(() => {
@@ -129,8 +133,14 @@ const Hierarchy = ({ data, onClick }) => {
         {({ width, height }) =>
           width === 0 || height === 0 ? null : (
             <Canvas height={height} width={width}>
-              <Link element={root} dx={dx} dy={dy} />
-              <Box element={root} dx={dx} dy={dy} onClick={onClick} />
+              <Link element={root} dx={dx} dy={dy} collapsed={collapsed} />
+              <Box
+                element={root}
+                dx={dx}
+                dy={dy}
+                onClick={onClick}
+                collapsed={collapsed}
+              />
             </Canvas>
           )
         }
@@ -147,6 +157,7 @@ Hierarchy.propTypes = {
       rank: PropTypes.number.isRequired,
     })
   ).isRequired,
+  collapsed: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default Hierarchy;
