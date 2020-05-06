@@ -3,9 +3,18 @@ import React, { useState, useCallback } from "react";
 import "./App.css";
 import Hierarchy from "./Hierarchy";
 
-const connections = [
+/** @typedef {{
+ *  rank: number,
+ *  name: string,
+ *  parent: string
+ * }} DataNode */
+
+const data = [
   { rank: 1, name: "Eve", parent: "" },
   { rank: 1, name: "Cain", parent: "Eve" },
+  { rank: 1, name: "po", parent: "Cain" },
+  { rank: 1, name: "jim", parent: "Cain" },
+  { rank: 1, name: "kelly", parent: "Cain" },
   { rank: 1, name: "Seth", parent: "Eve" },
   { rank: 1, name: "Enos", parent: "Seth" },
   { rank: 1, name: "Noam", parent: "Seth" },
@@ -18,7 +27,6 @@ const connections = [
 ];
 
 const App = () => {
-  const [data, setData] = useState(connections);
   const [collapsed, setCollapsed] = useState([]);
 
   const handleClick = useCallback(
