@@ -6,21 +6,15 @@ import PropTypes from "prop-types";
  * @typedef {import("d3").HierarchyNode} HierarchyNode
  * @typedef {import('./App').DataNode} DataNode
  * @param {{
- *  element: TreeNode,
+ *  source: TreeNode,
+ *  target: TreeNode
  *  dx:number,
  *  dy:number,
- *  collapsed: string[]
  * }} props */
-const Link = ({ element, dx, dy, collapsed }) => {
-  /** @type {HierarchyNode} */
-  const { data: node } = element;
-  /** @type {{data: DataNode}} */
-  const { data } = node;
+const Link = ({ source, target, dx, dy }) => {
+  const { x: parentX, y: parentY } = source;
+  const { x, y } = target;
 
-  const { x, y } = element;
-  const { x: parentX, y: parentY } = element.parent
-    ? element.parent
-    : { x: 0, y: 0 };
   const xrvs = parentX - x < 0 ? -1 : 1;
   const yrvs = parentY - y < 0 ? -1 : 1;
   const rdef = 35;
@@ -32,65 +26,35 @@ const Link = ({ element, dx, dy, collapsed }) => {
   const w = Math.abs(parentX - x) - r * 2;
 
   return (
-    <>
-      {element.parent && (
-        <path
-          transform={`translate(${dx / 2},${dy / 2})`}
-          stroke="black"
-          fill="none"
-          strokeWidth={2}
-          d={`
-      M ${element.x} ${element.y}
-      L ${element.x} ${element.y + h * yrvs}
-      C  ${element.x} ${element.y + h * yrvs + r * yrvs} ${element.x} ${
-            element.y + h * yrvs + r * yrvs
-          } ${element.x + r * xrvs} ${element.y + h * yrvs + r * yrvs}
-      L ${element.x + w * xrvs + r * xrvs} ${element.y + h * yrvs + r * yrvs}
-      C ${element.parent.x}  ${element.y + h * yrvs + r * yrvs} ${
-            element.parent.x
-          }  ${element.y + h * yrvs + r * yrvs} ${element.parent.x} ${
-            element.parent.y - h * yrvs
-          }
-      L ${element.parent.x} ${element.parent.y}
+    <path
+      transform={`translate(${dx / 2},${dy / 2})`}
+      stroke="black"
+      fill="none"
+      strokeWidth={2}
+      d={`
+      M ${x} ${y}
+      L ${x} ${y + h * yrvs}
+      C  ${x} ${y + h * yrvs + r * yrvs} ${x} ${y + h * yrvs + r * yrvs} ${
+        x + r * xrvs
+      } ${y + h * yrvs + r * yrvs}
+      L ${x + w * xrvs + r * xrvs} ${y + h * yrvs + r * yrvs}
+      C ${parentX}  ${y + h * yrvs + r * yrvs} ${parentX}  ${
+        y + h * yrvs + r * yrvs
+      } ${parentX} ${parentY - h * yrvs}
+      L ${parentX} ${parentY}
       `}
-        />
-      )}
-      {element.children &&
-        !collapsed.includes(node.id) &&
-        element.children.map((child, ii) => (
-          <Link
-            dx={dx}
-            dy={dy}
-            collapsed={collapsed}
-            element={child}
-            key={`${data.name}-${child.data.data.name}-link`}
-          />
-        ))}
-    </>
+    />
   );
 };
 
 Link.propTypes = {
-  element: PropTypes.shape({
-    children: PropTypes.arrayOf(
-      PropTypes.shape({
-        data: PropTypes.shape({
-          data: PropTypes.shape({
-            name: PropTypes.string.isRequired,
-          }).isRequired,
-        }).isRequired,
-      }).isRequired
-    ),
-    data: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      data: PropTypes.shape({
-        name: PropTypes.string.isRequired,
-      }).isRequired,
-    }).isRequired,
+  source: PropTypes.shape({
+    x: PropTypes.number.isRequired,
+    y: PropTypes.number.isRequired,
   }).isRequired,
+  target: PropTypes.shape({}),
   dx: PropTypes.number.isRequired,
   dy: PropTypes.number.isRequired,
-  collapsed: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 export default Link;

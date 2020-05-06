@@ -3,8 +3,8 @@ import PropTypes from "prop-types";
 import { stratify, hierarchy, tree } from "d3";
 import { AutoSizer } from "react-virtualized";
 import Canvas from "./Canvas";
-import Box from "./Box";
-import Link from "./Link";
+import Boxes from "./Boxes";
+import Links from "./Links";
 
 /** @typedef {import('d3-hierarchy').HierarchyNode} HierarchyNode */
 /** @typedef {HierarchyNode & {x: number, y:number }} TreeNode */
@@ -53,7 +53,6 @@ const Hierarchy = ({ data, onClick }) => {
       parents,
     };
   }, [data, collapsed]);
-  console.log(root.descendants());
   return (
     <div
       style={{
@@ -65,15 +64,15 @@ const Hierarchy = ({ data, onClick }) => {
         {({ width, height }) =>
           width === 0 || height === 0 ? null : (
             <Canvas height={height} width={width}>
-              <Link element={root} dx={dx} dy={dy} collapsed={collapsed} />
-              <Box
-                parents={parents}
-                element={root}
+              <Links root={root} dx={dx} dy={dy} collapsed={collapsed} />
+              <Boxes
+                root={root}
                 dx={dx}
                 dy={dy}
+                collapsed={collapsed}
+                parents={parents}
                 onClick={onClick}
                 onCollapse={handleClick}
-                collapsed={collapsed}
               />
             </Canvas>
           )
