@@ -1,9 +1,9 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { ReactSVGPanZoom, TOOL_AUTO } from "react-svg-pan-zoom";
+import { ReactSVGPanZoom, TOOL_AUTO, INITIAL_VALUE } from "react-svg-pan-zoom";
 
 export default class App extends React.PureComponent {
-  state = { tool: TOOL_AUTO, value: undefined };
+  state = { tool: TOOL_AUTO, value: INITIAL_VALUE };
   Viewer = null;
 
   static propTypes = {
