@@ -6,11 +6,14 @@ import Canvas from "./Canvas";
 import Box from "./Box";
 import Link from "./Link";
 
+/** @typedef {import('d3-hierarchy').HierarchyNode} HierarchyNode */
+/** @typedef {HierarchyNode & {x: number, y:number }} TreeNode */
+
 const stratifier = stratify()
   .id((d) => d.name)
   .parentId((d) => d.parent);
 
-/** @param {{data: any, onClick: (e)=>void, collapsed: string[] }} props*/
+/** @param {{data: any[], onClick: (e)=>void, collapsed: string[] }} props */
 const Hierarchy = ({ data, onClick, collapsed }) => {
   const dx = 150;
   const dy = 100;
@@ -19,6 +22,7 @@ const Hierarchy = ({ data, onClick, collapsed }) => {
     const collapsedSet = new Set(collapsed);
 
     const connections = stratifier(data);
+    /** @param {HierarchyNode} element */
     const dropChildren = (element) => {
       // this method mutates the connections data!
       // for each collapsed node drop the children
@@ -29,7 +33,6 @@ const Hierarchy = ({ data, onClick, collapsed }) => {
       if (element.children) element.children.forEach(dropChildren);
     };
     dropChildren(connections);
-
     const hierarchyConnections = hierarchy(connections);
     return {
       root: tree().nodeSize([dx, dy])(hierarchyConnections),

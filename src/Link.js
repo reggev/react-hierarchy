@@ -1,8 +1,21 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-/** @param {{element, dx:number, dy:number, collapsed: string[] }} props*/
+/**
+ * @typedef {import('./Hierarchy').TreeNode} TreeNode
+ * @typedef {import("d3").HierarchyNode} HierarchyNode
+ * @typedef {import('./App').DataNode} DataNode
+ * @param {{
+ *  element: TreeNode,
+ *  dx:number,
+ *  dy:number,
+ *  collapsed: string[]
+ * }} props */
 const Link = ({ element, dx, dy, collapsed }) => {
+  /** @type {HierarchyNode} */
+  const { data: node } = element;
+  /** @type {{data: DataNode}} */
+  const { data } = node;
   const { x, y } = element;
   const { x: parentX, y: parentY } = element.parent
     ? element.parent
@@ -41,20 +54,41 @@ const Link = ({ element, dx, dy, collapsed }) => {
         />
       )}
       {element.children &&
-        !collapsed.includes(element.data.id) &&
+        !collapsed.includes(node.id) &&
         element.children.map((child) => (
           <Link
             dx={dx}
             dy={dy}
             collapsed={collapsed}
             element={child}
-            key={`${element.data.data.name}-${child.data.data.name}-link`}
+            key={`${data.name}-${child.data.data.name}-link`}
           />
         ))}
     </>
   );
 };
 
-Link.propTypes = {};
+Link.propTypes = {
+  element: PropTypes.shape({
+    children: PropTypes.arrayOf(
+      PropTypes.shape({
+        data: PropTypes.shape({
+          data: PropTypes.shape({
+            name: PropTypes.string.isRequired,
+          }).isRequired,
+        }).isRequired,
+      }).isRequired
+    ),
+    data: PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      data: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+      }).isRequired,
+    }).isRequired,
+  }).isRequired,
+  dx: PropTypes.number.isRequired,
+  dy: PropTypes.number.isRequired,
+  collapsed: PropTypes.arrayOf(PropTypes.string).isRequired,
+};
 
 export default Link;
