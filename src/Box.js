@@ -1,5 +1,7 @@
 import React, { useCallback } from "react";
 import PropTypes from "prop-types";
+import Card from "./Card";
+import styles from "./styles.module.scss";
 
 const colors = ["#4c4d99", "#f71a7e", "#6f4f6e", "#9fc3d4"];
 
@@ -11,41 +13,45 @@ const colors = ["#4c4d99", "#f71a7e", "#6f4f6e", "#9fc3d4"];
  *  element: TreeNode,
  *  parents: Set<string>,
  *  onClick: (e)=>void,
+ *  onCollapse: (e) => void,
  *  dx:number,
  *  dy:number,
  *  collapsed: string[]
  * }} props */
-const Box = ({ element, parents, onClick, dx, dy, collapsed }) => {
+const Box = ({ element, parents, onCollapse, onClick, dx, dy, collapsed }) => {
   /** @type {HierarchyNode} */
   const { data: node } = element;
   /** @type {{data: DataNode}} */
   const { data } = node;
-  const handleClick = useCallback(() => onClick(node.id), [node, onClick]);
+
+  const handleClick = useCallback(() => onCollapse(node.id), [
+    node,
+    onCollapse,
+  ]);
   return (
     <>
       <g transform={`translate(${element.x}, ${element.y})`}>
-        <rect
-          rx={10}
-          x={0 + 20}
-          y={0 + 20}
-          width={dx - 40}
-          height={dy - 40}
-          fill={colors[1]}
-        ></rect>
-        <text
-          x={dx / 2}
-          y={dy / 2}
-          textAnchor="middle"
-          style={{ cursor: "default", userSelect: "none" }}
+        <foreignObject
+          width={dx}
+          height={dy}
+          className={styles.foreignObject}
+          xmlns="http://www.w3.org/1999/xhtml"
         >
-          {data.name}
-        </text>
+          <div className={styles.contentBox} style={{ height: dy - 20 }}>
+            <Card data={data} onClick={onClick} />
+          </div>
+        </foreignObject>
         {parents.has(node.id) && (
           <g
             onClick={handleClick}
-            transform={`translate(${dx / 2}, ${dy - 20})`}
+            transform={`translate(${dx / 2}, ${dy + 0})`}
           >
-            <circle cx={0} cy={0} r={10} fill={colors[2]} />
+            <circle
+              cx={0}
+              cy={0}
+              r={10}
+              fill={element.children ? colors[2] : colors[3]}
+            />
             <text x={0} y={5} textAnchor="middle">
               +
             </text>
@@ -61,8 +67,9 @@ const Box = ({ element, parents, onClick, dx, dy, collapsed }) => {
             element={child}
             collapsed={collapsed}
             parents={parents}
-            key={`${data.name}-${child.data.data.name}`}
             onClick={onClick}
+            onCollapse={onCollapse}
+            key={`${data.name}-${child.data.data.name}`}
           />
         ))}
     </>
@@ -89,6 +96,7 @@ Box.propTypes = {
     }).isRequired,
   }).isRequired,
   onClick: PropTypes.func.isRequired,
+  onCollapse: PropTypes.func.isRequired,
   dx: PropTypes.number.isRequired,
   dy: PropTypes.number.isRequired,
   collapsed: PropTypes.arrayOf(PropTypes.string).isRequired,

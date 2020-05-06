@@ -16,6 +16,7 @@ const Link = ({ element, dx, dy, collapsed }) => {
   const { data: node } = element;
   /** @type {{data: DataNode}} */
   const { data } = node;
+
   const { x, y } = element;
   const { x: parentX, y: parentY } = element.parent
     ? element.parent
@@ -29,6 +30,7 @@ const Link = ({ element, dx, dy, collapsed }) => {
     Math.abs(parentY - y) / 2 < rInitial ? Math.abs(parentY - y) / 2 : rInitial;
   const h = Math.abs(parentY - y) / 2 - r;
   const w = Math.abs(parentX - x) - r * 2;
+
   return (
     <>
       {element.parent && (
@@ -36,7 +38,7 @@ const Link = ({ element, dx, dy, collapsed }) => {
           transform={`translate(${dx / 2},${dy / 2})`}
           stroke="black"
           fill="none"
-          strokeWidth={1}
+          strokeWidth={2}
           d={`
       M ${element.x} ${element.y}
       L ${element.x} ${element.y + h * yrvs}
@@ -55,7 +57,7 @@ const Link = ({ element, dx, dy, collapsed }) => {
       )}
       {element.children &&
         !collapsed.includes(node.id) &&
-        element.children.map((child) => (
+        element.children.map((child, ii) => (
           <Link
             dx={dx}
             dy={dy}

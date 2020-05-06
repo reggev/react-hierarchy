@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+// @ts-ignore
 import { ReactSVGPanZoom, TOOL_AUTO, INITIAL_VALUE } from "react-svg-pan-zoom";
 
 export default class App extends React.PureComponent {
@@ -17,10 +18,10 @@ export default class App extends React.PureComponent {
 
   componentDidMount() {
     this.Viewer.fitSelection(
-      this.props.width / -2,
-      0,
-      this.props.width,
-      this.props.height
+      this.props.width * -0.75,
+      -100,
+      this.props.width * 2,
+      this.props.height * 2
     );
   }
 
@@ -55,6 +56,7 @@ export default class App extends React.PureComponent {
         background="white"
         ref={(Viewer) => (this.Viewer = Viewer)}
         tool="auto"
+        customMiniature={() => null}
         onChangeTool={(tool) => this.changeTool(tool)}
         value={this.state.value}
         onChangeValue={(value) => this.changeValue(value)}

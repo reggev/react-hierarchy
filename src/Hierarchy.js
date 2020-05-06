@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState, useCallback } from "react";
 import PropTypes from "prop-types";
 import { stratify, hierarchy, tree } from "d3";
 import { AutoSizer } from "react-virtualized";
@@ -13,10 +13,22 @@ const stratifier = stratify()
   .id((d) => d.name)
   .parentId((d) => d.parent);
 
-/** @param {{data: any[], onClick: (e)=>void, collapsed: string[] }} props */
-const Hierarchy = ({ data, onClick, collapsed }) => {
-  const dx = 150;
-  const dy = 100;
+/** @param {{data: any[], onClick: (e)=>void }} props */
+const Hierarchy = ({ data, onClick }) => {
+  const [collapsed, setCollapsed] = useState([]);
+
+  const handleClick = useCallback(
+    (id) =>
+      setCollapsed((state) =>
+        state.includes(id)
+          ? state.filter((item) => item !== id)
+          : state.concat(id)
+      ),
+    [setCollapsed]
+  );
+  const dx = 500;
+  const dy = 320;
+  const nodeSpacing = 150;
   const { root, parents } = useMemo(() => {
     const parents = new Set(data.map((item) => item.parent));
     const collapsedSet = new Set(collapsed);
@@ -35,18 +47,18 @@ const Hierarchy = ({ data, onClick, collapsed }) => {
     dropChildren(connections);
     const hierarchyConnections = hierarchy(connections);
     return {
-      root: tree().nodeSize([dx, dy])(hierarchyConnections),
+      root: tree().nodeSize([dx + nodeSpacing, dy + nodeSpacing])(
+        hierarchyConnections
+      ),
       parents,
     };
   }, [data, collapsed]);
-
+  console.log(root.descendants());
   return (
     <div
       style={{
-        flex: 1,
         width: "100%",
         height: "100%",
-        background: "papayawhip",
       }}
     >
       <AutoSizer>
@@ -60,6 +72,7 @@ const Hierarchy = ({ data, onClick, collapsed }) => {
                 dx={dx}
                 dy={dy}
                 onClick={onClick}
+                onCollapse={handleClick}
                 collapsed={collapsed}
               />
             </Canvas>
@@ -78,7 +91,11 @@ Hierarchy.propTypes = {
       rank: PropTypes.number.isRequired,
     })
   ).isRequired,
-  collapsed: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onClick: PropTypes.func,
+};
+
+Hierarchy.defaultProps = {
+  onClick: () => {},
 };
 
 export default Hierarchy;
