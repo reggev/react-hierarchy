@@ -22,7 +22,7 @@ const Links = ({ root, dx, dy, springConfig, nodeIdField }) => {
     <Fragment>
       {links.map(({ source, target }) => (
         <Link
-          key={`link-${source.data[nodeIdField]}-${target.data[nodeIdField]}`}
+          key={`link-${source.data.id}-${target.data.id}`}
           source={source}
           target={target}
           dx={dx}

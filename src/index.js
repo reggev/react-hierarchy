@@ -35,6 +35,7 @@ const Hierarchy = ({
   nodeIdField,
   parentIdField
 }) => {
+  const [collapsed, setCollapsed] = useState([])
   const stratifier = useMemo(
     () =>
       stratify()
@@ -42,7 +43,6 @@ const Hierarchy = ({
         .parentId((d) => d[parentIdField]),
     [nodeIdField, parentIdField]
   )
-  const [collapsed, setCollapsed] = useState([])
 
   const handleClick = useCallback(
     (id) =>
