@@ -1,6 +1,7 @@
 # react-hierarchy
 
 > A native React hierarchy chart
+this project uses d3 for layout, react-spring for animations, react-virtualized & react-svg-pan-zoom to manage the svg container.
 
 [![NPM](https://img.shields.io/npm/v/react-hierarchy.svg)](https://www.npmjs.com/package/react-hierarchy) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
@@ -17,6 +18,19 @@ import React, { Component } from 'react'
 
 import MyComponent from 'react-hierarchy'
 import 'react-hierarchy/dist/index.css'
+
+/** @typedef {{
+ * data: any[], 
+ * onClick: (id)=>void, 
+ * Component: React.ReactType, 
+ * boxStyle?: string,
+ * nodeHeight?: number,
+ * nodeWidth?: number,
+ * nodeSpacing?: number
+ * springConfig?: SpringConfig
+ * nodeIdField?: string,
+ * parentIdField?: string
+ }} HierarchyProps */
 
 const rawData = [
   { rank: 1, customId: '1', parentId: '', name: 'Eve' },
