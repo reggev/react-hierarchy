@@ -53,6 +53,7 @@ export default class App extends React.PureComponent {
         detectAutoPan={false}
         customToolbar={() => null}
         background='white'
+        preventPanOutside={false}
         ref={(Viewer) => (this.Viewer = Viewer)}
         tool='auto'
         customMiniature={() => null}
