@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useCallback } from 'react'
+import React, { useMemo, useState, useCallback, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { stratify, hierarchy, tree } from 'd3'
 import { AutoSizer } from 'react-virtualized'
@@ -21,7 +21,8 @@ import Links from './Links'
  * nodeSpacing?: number
  * springConfig?: SpringConfig
  * nodeIdField?: string,
- * parentIdField?: string
+ * parentIdField?: string,
+ * forwardedRef: any
  }} props */
 const Hierarchy = ({
   data,
@@ -33,7 +34,8 @@ const Hierarchy = ({
   nodeSpacing,
   springConfig,
   nodeIdField,
-  parentIdField
+  parentIdField,
+  forwardedRef
 }) => {
   const [collapsed, setCollapsed] = useState([])
   const stratifier = useMemo(
@@ -43,6 +45,12 @@ const Hierarchy = ({
         .parentId((d) => d[parentIdField]),
     [nodeIdField, parentIdField]
   )
+  useEffect(() => {
+    if (!forwardedRef) return
+    forwardedRef.current = {
+      collapseAll
+    }
+  }, [forwardedRef])
 
   const handleClick = useCallback(
     (id) =>
@@ -54,30 +62,44 @@ const Hierarchy = ({
     [setCollapsed]
   )
 
-  const { root, parents } = useMemo(() => {
-    const parents = new Set(data.map((item) => item[parentIdField]))
-    const collapsedSet = new Set(collapsed)
+  const setupHierarchy = useCallback(
+    (data, collapsed) => {
+      const parents = new Set(data.map((item) => item[parentIdField]))
+      const collapsedSet = new Set(collapsed)
 
-    const connections = stratifier(data)
-    /** @param {HierarchyNode} element */
-    const dropChildren = (element) => {
-      // this method mutates the connections data!
-      // for each collapsed node drop the children
-      if (collapsedSet.has(element.data[nodeIdField])) {
-        element.children = null
-        return
+      const connections = stratifier(data)
+      /** @param {HierarchyNode} element */
+      const dropChildren = (element) => {
+        // this method mutates the connections data!
+        // for each collapsed node drop the children
+        if (collapsedSet.has(element.data[nodeIdField])) {
+          element.children = null
+          return
+        }
+        if (element.children) element.children.forEach(dropChildren)
       }
-      if (element.children) element.children.forEach(dropChildren)
-    }
-    dropChildren(connections)
-    const hierarchyConnections = hierarchy(connections)
-    return {
-      root: tree().nodeSize([dx + nodeSpacing, dy + nodeSpacing])(
-        hierarchyConnections
-      ),
-      parents
-    }
-  }, [data, collapsed, dx, dy, nodeSpacing])
+      dropChildren(connections)
+      const hierarchyConnections = hierarchy(connections)
+      return {
+        root: tree().nodeSize([dx + nodeSpacing, dy + nodeSpacing])(
+          hierarchyConnections
+        ),
+        parents
+      }
+    },
+    [dx, dy, nodeSpacing]
+  )
+
+  const { root, parents } = useMemo(() => setupHierarchy(data, collapsed), [
+    data,
+    collapsed
+  ])
+
+  const collapseAll = useCallback(() => setCollapsed([...parents]), [
+    parents,
+    setCollapsed
+  ])
+
   return (
     <div
       style={{
@@ -128,7 +150,8 @@ Hierarchy.propTypes = {
   nodeSpacing: PropTypes.number,
   springConfig: PropTypes.object,
   nodeIdField: PropTypes.string,
-  parentIdField: PropTypes.string
+  parentIdField: PropTypes.string,
+  forwardedRef: PropTypes.any
 }
 
 Hierarchy.defaultProps = {
@@ -142,4 +165,6 @@ Hierarchy.defaultProps = {
   parentIdField: 'parentId'
 }
 
-export default Hierarchy
+export default React.forwardRef((props, ref) => (
+  <Hierarchy {...props} forwardedRef={ref} />
+))

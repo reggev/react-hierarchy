@@ -1,8 +1,9 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useRef } from 'react'
 import Hierarchy from 'react-hierarchy'
 import 'react-hierarchy/dist/index.css'
 import './App.css'
 import Card from './Card'
+import styles from './styles.module.scss'
 
 /** @typedef {{
  *  rank: number,
@@ -26,9 +27,9 @@ const rawData = [
   { rank: 2, customId: '13', CustomParentId: '12', name: 'Enoch' },
   { rank: 1, customId: '14', CustomParentId: '1', name: 'Azura' }
 ]
-
 const App = () => {
   const [data, setData] = useState(rawData)
+  const hierarchyRef = useRef()
   const handleClick = useCallback(
     (id) => {
       setData((state) => {
@@ -44,14 +45,22 @@ const App = () => {
     [setData]
   )
 
+  const onCollapse = useCallback(() => hierarchyRef.current.collapseAll(), [
+    hierarchyRef
+  ])
+
   return (
     <div className='App'>
+      <div className={styles.buttonsPanel}>
+        <button onClick={onCollapse}>collapse all</button>
+      </div>
       <Hierarchy
         data={data}
         onClick={handleClick}
         Component={Card}
         nodeIdField='customId'
         parentIdField='CustomParentId'
+        ref={hierarchyRef}
       />
     </div>
   )

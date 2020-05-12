@@ -13,37 +13,37 @@ $mainColor: $mediumGray;
 $accentColor: lighten(#56d1f6, 20%);
 $radius: 0.25em;
 
-[data-node-rank="-1"] {
+[data-node-rank='-1'] {
   $color: #e6e6e6;
   @include gradient($color);
 }
 
-[data-node-rank="0"] {
+[data-node-rank='0'] {
   $color: #f65555;
   @include gradient($color);
 }
-[data-node-rank="1"] {
+[data-node-rank='1'] {
   $color: #f68655;
   @include gradient($color);
 }
-[data-node-rank="2"] {
+[data-node-rank='2'] {
   $color: #f6b655;
   @include gradient($color);
 }
-[data-node-rank="3"] {
+[data-node-rank='3'] {
   $color: #f6e656;
   @include gradient($color);
 }
-[data-node-rank="4"] {
+[data-node-rank='4'] {
   $color: #d6f655;
   @include gradient($color);
 }
-[data-node-rank="5"] {
+[data-node-rank='5'] {
   $color: #a6ed5e;
   @include gradient($color);
 }
 
-[data-expand-visible="false"] {
+[data-expand-visible='false'] {
   display: none;
 }
 
@@ -72,7 +72,7 @@ $radius: 0.25em;
   align-self: center;
   margin: 0 0.5ch;
   &:after {
-    content: "%";
+    content: '%';
     font-size: 1em;
   }
 }
@@ -111,5 +111,17 @@ $radius: 0.25em;
   transform: translateX(-50%);
   &:hover {
     background: $accentColor;
+  }
+}
+.buttonsPanel {
+  position: absolute;
+  top: 1em;
+  left: 1em;
+  z-index: 1;
+  & > button {
+    font: inherit;
+    border-radius: 1em;
+    background-color: white;
+    padding: 0.5em 2ch;
   }
 }
