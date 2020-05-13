@@ -16,7 +16,7 @@ const Viewer = React.forwardRef(
    *  dy: number,
    *  height: number,
    *  width: number,
-   *  children: any
+   *  children: any,
    * }} props */
   (props, ref) => {
     const [state, setState] = useState({

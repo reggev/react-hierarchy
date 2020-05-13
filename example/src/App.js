@@ -75,6 +75,7 @@ const App = () => {
         nodeIdField='customId'
         parentIdField='CustomParentId'
         ref={hierarchyRef}
+        padding={{ top: 600 }}
       />
     </div>
   )

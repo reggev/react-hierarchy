@@ -19,6 +19,13 @@ import Links from './Links'
  *  @typedef {import('react-spring').SpringConfig} SpringConfig
  * */
 
+const defaultPadding = {
+  bottom: 0,
+  top: 0,
+  left: 0,
+  right: 0
+}
+
 const Hierarchy = React.forwardRef(
   /** @param {{
   * data: any[], 
@@ -32,6 +39,7 @@ const Hierarchy = React.forwardRef(
   * nodeIdField?: string,
   * parentIdField?: string,
   * maxInitialDepth?: number,
+  * padding: {top: number, bottom:number, left: number, right: number}
   }} props */
   (
     {
@@ -45,7 +53,8 @@ const Hierarchy = React.forwardRef(
       springConfig,
       nodeIdField,
       parentIdField,
-      maxInitialDepth
+      maxInitialDepth,
+      padding
     },
     ref
   ) => {
@@ -174,13 +183,24 @@ const Hierarchy = React.forwardRef(
         horizontalOffset: dx * 2,
         verticalOffset: dy * 2
       }
+      const _padding = { ...defaultPadding, ...padding }
       const dimensions = {
-        minY: minY - corrections.verticalPadding,
-        minX: minX - corrections.horizontalPadding,
+        minY: minY - corrections.verticalPadding - _padding.top,
+        minX: minX - corrections.horizontalPadding - _padding.left,
         maxX,
         maxY,
-        width: Math.abs(minX) + Math.abs(maxX) + corrections.horizontalOffset,
-        height: Math.abs(minY) + Math.abs(maxY) + corrections.verticalOffset
+        width:
+          Math.abs(minX) +
+          Math.abs(maxX) +
+          corrections.horizontalOffset +
+          _padding.left +
+          _padding.right,
+        height:
+          Math.abs(minY) +
+          Math.abs(maxY) +
+          corrections.verticalOffset +
+          _padding.top +
+          _padding.bottom
       }
       // @ts-ignore
       viewerRef.current.fitSelection(
@@ -190,7 +210,7 @@ const Hierarchy = React.forwardRef(
         dimensions.height
       )
       return dimensions
-    }, [root, dx, dy, viewerRef])
+    }, [root, dx, dy, viewerRef, padding])
 
     useImperativeHandle(ref, () => ({
       collapseAll,
@@ -256,7 +276,13 @@ Hierarchy.propTypes = {
   springConfig: PropTypes.object,
   nodeIdField: PropTypes.string,
   parentIdField: PropTypes.string,
-  maxInitialDepth: PropTypes.number
+  maxInitialDepth: PropTypes.number,
+  padding: PropTypes.shape({
+    bottom: PropTypes.number,
+    top: PropTypes.number,
+    left: PropTypes.number,
+    right: PropTypes.number
+  })
 }
 
 Hierarchy.defaultProps = {
@@ -268,7 +294,13 @@ Hierarchy.defaultProps = {
   springConfig: defaultSpringConfig,
   nodeIdField: 'id',
   parentIdField: 'parentId',
-  maxInitialDepth: undefined
+  maxInitialDepth: undefined,
+  padding: {
+    bottom: 0,
+    top: 0,
+    left: 0,
+    right: 0
+  }
 }
 
 export default Hierarchy
