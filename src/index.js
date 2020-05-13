@@ -2,13 +2,14 @@ import React, {
   useMemo,
   useState,
   useCallback,
+  useRef,
   useImperativeHandle
 } from 'react'
 import PropTypes from 'prop-types'
 import { stratify, hierarchy, tree } from 'd3'
 import { AutoSizer } from 'react-virtualized'
 import defaultSpringConfig from './springConfig'
-import Canvas from './Canvas'
+import Viewer from './Viewer'
 import Boxes from './Boxes'
 import Links from './Links'
 
@@ -49,7 +50,7 @@ const Hierarchy = React.forwardRef(
     ref
   ) => {
     const [isFirstRender, setIsFirstRender] = useState(true)
-
+    const viewerRef = useRef()
     if (isFirstRender) setIsFirstRender(false)
 
     const [collapsed, setCollapsed] = useState([])
@@ -102,7 +103,6 @@ const Hierarchy = React.forwardRef(
           const collapsedNodes = filterByDepth(connections)
           setCollapsed(collapsedNodes)
         }
-
         /** @param {HierarchyNode} element */
         const dropChildren = (element) => {
           // this method mutates the connections data!
@@ -113,10 +113,13 @@ const Hierarchy = React.forwardRef(
           }
           if (element.children) element.children.forEach(dropChildren)
         }
+
         if (!limitedConnections) dropChildren(connections)
+
         const hierarchyConnections = hierarchy(
           limitedConnections || connections
         )
+
         return {
           root: tree().nodeSize([dx + nodeSpacing, dy + nodeSpacing])(
             hierarchyConnections
@@ -149,8 +152,49 @@ const Hierarchy = React.forwardRef(
       setCollapsed
     ])
 
+    const zoomExtends = useCallback(() => {
+      if (!viewerRef.current) return false
+      const minY = 0 // root y
+      const { minX, maxX, maxY } = root.leaves().reduce(
+        (acc, item) => ({
+          minX: Math.min(acc.minX, item.x),
+          maxX: Math.max(acc.maxX, item.x),
+          maxY: Math.max(acc.maxY, item.y)
+        }),
+        {
+          minX: 0,
+          maxX: 100,
+          maxY: 100
+        }
+      )
+
+      const corrections = {
+        horizontalPadding: dx / 2,
+        verticalPadding: dy / 2,
+        horizontalOffset: dx * 2,
+        verticalOffset: dy * 2
+      }
+      const dimensions = {
+        minY: minY - corrections.verticalPadding,
+        minX: minX - corrections.horizontalPadding,
+        maxX,
+        maxY,
+        width: Math.abs(minX) + Math.abs(maxX) + corrections.horizontalOffset,
+        height: Math.abs(minY) + Math.abs(maxY) + corrections.verticalOffset
+      }
+      // @ts-ignore
+      viewerRef.current.fitSelection(
+        dimensions.minX,
+        dimensions.minY,
+        dimensions.width,
+        dimensions.height
+      )
+      return dimensions
+    }, [root, dx, dy, viewerRef])
+
     useImperativeHandle(ref, () => ({
-      collapseAll
+      collapseAll,
+      zoomExtends
     }))
 
     return (
@@ -163,7 +207,14 @@ const Hierarchy = React.forwardRef(
         <AutoSizer>
           {({ width, height }) =>
             width === 0 || height === 0 ? null : (
-              <Canvas height={height} width={width}>
+              <Viewer
+                height={height}
+                width={width}
+                ref={viewerRef}
+                onMount={zoomExtends}
+                dx={dx}
+                dy={dy}
+              >
                 <Links
                   nodeIdField={nodeIdField}
                   root={root}
@@ -185,7 +236,7 @@ const Hierarchy = React.forwardRef(
                   boxStyle={boxStyle}
                   springConfig={springConfig}
                 />
-              </Canvas>
+              </Viewer>
             )
           }
         </AutoSizer>

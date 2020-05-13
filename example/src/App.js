@@ -32,6 +32,7 @@ const rawData = [
 ]
 const App = () => {
   const [data, setData] = useState(rawData)
+
   const hierarchyRef = useRef()
   const handleClick = useCallback(
     (id) => {
@@ -48,14 +49,23 @@ const App = () => {
     [setData]
   )
 
-  const onCollapse = useCallback(() => hierarchyRef.current.collapseAll(), [
-    hierarchyRef
-  ])
+  const onCollapse = useCallback(() => {
+    if (hierarchyRef.current) {
+      // @ts-ignore
+      hierarchyRef.current.collapseAll()
+    }
+  }, [hierarchyRef])
+
+  const zoomExtends = useCallback(() => {
+    // @ts-ignore
+    if (hierarchyRef.current) hierarchyRef.current.zoomExtends()
+  }, [hierarchyRef])
 
   return (
     <div className='App'>
       <div className={styles.buttonsPanel}>
         <button onClick={onCollapse}>collapse all</button>
+        <button onClick={zoomExtends}>zoom extends</button>
       </div>
       <Hierarchy
         maxInitialDepth={1}
