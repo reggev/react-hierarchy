@@ -25,7 +25,10 @@ const rawData = [
   { rank: 3, customId: '11', CustomParentId: '1', name: 'Abel' },
   { rank: 4, customId: '12', CustomParentId: '1', name: 'Awan' },
   { rank: 2, customId: '13', CustomParentId: '12', name: 'Enoch' },
-  { rank: 1, customId: '14', CustomParentId: '1', name: 'Azura' }
+  { rank: 1, customId: '14', CustomParentId: '1', name: 'Azura' },
+  { rank: 1, customId: '15', CustomParentId: '14', name: 'Azura_2' },
+  { rank: 1, customId: '16', CustomParentId: '15', name: 'Azura_3' },
+  { rank: 1, customId: '17', CustomParentId: '16', name: 'Azura_4' }
 ]
 const App = () => {
   const [data, setData] = useState(rawData)
@@ -55,6 +58,7 @@ const App = () => {
         <button onClick={onCollapse}>collapse all</button>
       </div>
       <Hierarchy
+        maxInitialDepth={1}
         data={data}
         onClick={handleClick}
         Component={Card}

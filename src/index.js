@@ -22,6 +22,7 @@ import Links from './Links'
  * springConfig?: SpringConfig
  * nodeIdField?: string,
  * parentIdField?: string,
+ * maxInitialDepth: number,
  * forwardedRef: any
  }} props */
 const Hierarchy = ({
@@ -35,8 +36,13 @@ const Hierarchy = ({
   springConfig,
   nodeIdField,
   parentIdField,
+  maxInitialDepth,
   forwardedRef
 }) => {
+  const [isFirstRender, setIsFirstRender] = useState(true)
+
+  if (isFirstRender) setIsFirstRender(false)
+
   const [collapsed, setCollapsed] = useState([])
   const stratifier = useMemo(
     () =>
@@ -45,6 +51,7 @@ const Hierarchy = ({
         .parentId((d) => d[parentIdField]),
     [nodeIdField, parentIdField]
   )
+
   useEffect(() => {
     if (!forwardedRef) return
     forwardedRef.current = {
@@ -62,12 +69,39 @@ const Hierarchy = ({
     [setCollapsed]
   )
 
+  const filterByDepth = useCallback(
+    (connections) => {
+      /** @type {HierarchyNode[]} */
+      const descendants = connections.descendants()
+      return descendants
+        .filter((item) => item.depth >= maxInitialDepth)
+        .map((item) => item.id)
+    },
+    [maxInitialDepth]
+  )
+
   const setupHierarchy = useCallback(
     (data, collapsed) => {
       const parents = new Set(data.map((item) => item[parentIdField]))
       const collapsedSet = new Set(collapsed)
 
       const connections = stratifier(data)
+      let limitedConnections = null
+
+      if (isFirstRender && maxInitialDepth) {
+        /* 
+        Render root only on the first render,
+        This is done to avoid rendering a full tree if a limited depth is set 
+        the call to "setCollapsed" and setting the "isFirstRender" flag above 
+        will re-render the component, the second render will use an actual root 
+        (with limited depth).
+        */
+        limitedConnections = { ...connections, children: null }
+
+        const collapsedNodes = filterByDepth(connections)
+        setCollapsed(collapsedNodes)
+      }
+
       /** @param {HierarchyNode} element */
       const dropChildren = (element) => {
         // this method mutates the connections data!
@@ -78,8 +112,8 @@ const Hierarchy = ({
         }
         if (element.children) element.children.forEach(dropChildren)
       }
-      dropChildren(connections)
-      const hierarchyConnections = hierarchy(connections)
+      if (!limitedConnections) dropChildren(connections)
+      const hierarchyConnections = hierarchy(limitedConnections || connections)
       return {
         root: tree().nodeSize([dx + nodeSpacing, dy + nodeSpacing])(
           hierarchyConnections
@@ -87,7 +121,15 @@ const Hierarchy = ({
         parents
       }
     },
-    [dx, dy, nodeSpacing]
+    [
+      dx,
+      dy,
+      nodeSpacing,
+      isFirstRender,
+      setIsFirstRender,
+      maxInitialDepth,
+      setCollapsed
+    ]
   )
 
   const { root, parents } = useMemo(() => setupHierarchy(data, collapsed), [
@@ -151,6 +193,7 @@ Hierarchy.propTypes = {
   springConfig: PropTypes.object,
   nodeIdField: PropTypes.string,
   parentIdField: PropTypes.string,
+  maxInitialDepth: PropTypes.number,
   forwardedRef: PropTypes.any
 }
 
@@ -162,7 +205,8 @@ Hierarchy.defaultProps = {
   nodeSpacing: 150,
   springConfig: defaultSpringConfig,
   nodeIdField: 'id',
-  parentIdField: 'parentId'
+  parentIdField: 'parentId',
+  maxInitialDepth: undefined
 }
 
 export default React.forwardRef((props, ref) => (
