@@ -1,127 +1,13 @@
-@mixin gradient($color) {
-  $color_b: darken($color, 5%);
-  background-color: $color;
-  background-image: linear-gradient(45deg, $color 0%, $color_b 100%);
-}
-$extraLightGray: #e9e9e9;
-$lightGray: #bdbdbd;
-$mediumGray: #585858;
-$darkGray: #333333;
-
-$bg: $extraLightGray;
-$mainColor: $mediumGray;
-$accentColor: lighten(#56d1f6, 20%);
-$radius: 0.25em;
-
-[data-node-rank='-1'] {
-  $color: #e6e6e6;
-  @include gradient($color);
-}
-
-[data-node-rank='0'] {
-  $color: #f65555;
-  @include gradient($color);
-}
-[data-node-rank='1'] {
-  $color: #f68655;
-  @include gradient($color);
-}
-[data-node-rank='2'] {
-  $color: #f6b655;
-  @include gradient($color);
-}
-[data-node-rank='3'] {
-  $color: #f6e656;
-  @include gradient($color);
-}
-[data-node-rank='4'] {
-  $color: #d6f655;
-  @include gradient($color);
-}
-[data-node-rank='5'] {
-  $color: #a6ed5e;
-  @include gradient($color);
-}
-
-[data-expand-visible='false'] {
-  display: none;
-}
-
-.nodeContent {
-  font: inherit;
-  margin: 0;
-  padding-top: 0;
-  padding: 0 1rem;
-  line-height: 1.4em;
-}
-.nodeHeaderContainer {
-  margin: 0;
-  padding: 1rem;
-  margin-bottom: 0.25em;
-  box-shadow: 0 0.5em 0.5em rgba(black, 0.15);
-  border-bottom: 1px solid rgba(black, 0.15);
+.contentBox {
   display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 0.5em;
+  border: 1px solid rgba(black, 0.35);
+  overflow: hidden;
+  box-shadow: 0.25em 0.5em 1em rgba(black, 0.15);
 }
 
-.nodeHeader {
-  line-height: 1.4em;
-  font-size: 1.4em;
-}
-.nodeHeaderPercent {
-  font-size: 2em;
-  align-self: center;
-  margin: 0 0.5ch;
-  &:after {
-    content: '%';
-    font-size: 1em;
-  }
-}
-
-.nodeFooter {
-  margin-top: auto;
-  font-size: 1.2em;
-  font-weight: 600;
-  padding: 0.5em 0;
-  text-align: center;
-  font-style: italic;
-  font-weight: normal;
-  width: 100%;
-  border-top: 1px solid rgba(black, 0.15);
-}
-
-.svg-chart-container {
-  background-color: transparent;
-  cursor: default;
-}
-
-.link {
-  stroke: rgba(black, 0.25);
-  stroke-width: 3px;
-}
-
-.expandButton {
-  position: absolute;
-  background: $extraLightGray;
-  border: 3px solid rgba(black, 0.15);
-  margin-top: 1em;
-  padding: 0.25em 1em;
-  border-radius: $radius;
-  bottom: -1em;
-  left: 50%;
-  transform: translateX(-50%);
-  &:hover {
-    background: $accentColor;
-  }
-}
-.buttonsPanel {
-  position: absolute;
-  top: 1em;
-  left: 1em;
-  z-index: 1;
-  & > button {
-    font: inherit;
-    border-radius: 1em;
-    background-color: white;
-    padding: 0.5em 2ch;
-  }
+.foreignObject {
+  overflow: visible;
 }

@@ -1,14 +1,29 @@
-import React, { useCallback, Fragment } from 'react'
-import PropTypes from 'prop-types'
-import styles from './styles.module.scss'
+import React, { useCallback, Fragment } from "react";
+import styles from "./styles.module.scss";
 
-const Card = ({ id, data, onClick, onCollapse, showExpand, isExpanded }) => {
+type Props = {
+  id: string;
+  data: { rank: number; name: string };
+  onClick: (id: string) => void;
+  onCollapse: (id: string) => void;
+  showExpand: boolean;
+  isExpanded: boolean;
+};
+
+const Card = ({
+  id,
+  data,
+  onClick,
+  onCollapse,
+  showExpand,
+  isExpanded,
+}: Props) => {
   const handleClick = useCallback(() => {
-    onClick(id)
-  }, [onClick, id])
+    onClick(id);
+  }, [onClick, id]);
   const handleCollapse = useCallback(() => {
-    onCollapse(id)
-  }, [onCollapse, id])
+    onCollapse(id);
+  }, [onCollapse, id]);
   return (
     <Fragment>
       <header
@@ -24,19 +39,11 @@ const Card = ({ id, data, onClick, onCollapse, showExpand, isExpanded }) => {
       </footer>
       {showExpand && (
         <button className={styles.expandButton} onClick={handleCollapse}>
-          {isExpanded ? '-' : '+'}
+          {isExpanded ? "-" : "+"}
         </button>
       )}
     </Fragment>
-  )
-}
+  );
+};
 
-Card.propTypes = {
-  id: PropTypes.string.isRequired,
-  data: PropTypes.shape({
-    name: PropTypes.string.isRequired
-  }),
-  onClick: PropTypes.func
-}
-
-export default Card
+export default Card;

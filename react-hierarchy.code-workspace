@@ -5,8 +5,7 @@
       "name": "tree"
     },
     {
-      "path": "./packages/example",
-      "name": "example"
+      "path": "packages/example"
     }
   ]
 }
