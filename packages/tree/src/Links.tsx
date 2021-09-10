@@ -1,25 +1,25 @@
-import React, { useMemo } from "react";
-import Link from "./Link";
-import { TreeNode } from "./index";
-import { SpringConfig } from "@react-spring/web";
+import React, { useMemo } from 'react'
+import { TreeNode } from './index'
+import { SpringConfig } from '@react-spring/web'
+import Link from './Link'
 
 type Props<T> = {
-  root: TreeNode<T>;
-  dx: number;
-  dy: number;
-  collapsed: string[];
-  springConfig: SpringConfig;
-  nodeIdField: keyof T & string;
-};
+  root: TreeNode<T>
+  dx: number
+  dy: number
+  collapsed: string[]
+  springConfig: SpringConfig
+  nodeIdField: keyof T & string
+}
 
-const Links = <T extends object>({
+const Links = <T extends Record<string, unknown>>({
   root,
   dx,
   dy,
   springConfig,
-  nodeIdField,
+  nodeIdField
 }: Props<T>) => {
-  const links = useMemo(() => root.links(), [root]);
+  const links = useMemo(() => root.links(), [root])
 
   return (
     <>
@@ -34,7 +34,7 @@ const Links = <T extends object>({
         />
       ))}
     </>
-  );
-};
+  )
+}
 
-export default Links;
+export default Links

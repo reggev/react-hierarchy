@@ -4,64 +4,64 @@ import React, {
   useCallback,
   useImperativeHandle,
   useEffect,
-  LegacyRef,
-} from "react";
-import { ReactSVGPanZoom, TOOL_AUTO, Value } from "react-svg-pan-zoom";
+  LegacyRef
+} from 'react'
+import { ReactSVGPanZoom, TOOL_AUTO, Value } from 'react-svg-pan-zoom'
 
 type Props = {
-  onMount?: () => void;
-  dx: number;
-  dy: number;
-  height: number;
-  width: number;
-  children: JSX.Element | JSX.Element[];
-};
+  onMount?: () => void
+  dx: number
+  dy: number
+  height: number
+  width: number
+  children: JSX.Element | JSX.Element[]
+}
 
 export type RefProps = {
-  fitSelection: (x: number, y: number, width: number, height: number) => void;
-};
+  fitSelection: (x: number, y: number, width: number, height: number) => void
+}
 
 const Viewer = React.forwardRef<any, Props>((props, ref) => {
   const [state, setState] = useState({
     tool: TOOL_AUTO,
     value: {} as Value,
-    didFirstRender: false,
-  });
+    didFirstRender: false
+  })
 
-  const svgRef = useRef<ReactSVGPanZoom>();
+  const svgRef = useRef<ReactSVGPanZoom>()
 
   useEffect(() => {
     if (!state.didFirstRender && svgRef.current && props.onMount) {
-      props.onMount();
-      setState((s) => ({ ...s, didFirstRender: true }));
+      props.onMount()
+      setState((s) => ({ ...s, didFirstRender: true }))
     }
-  }, [svgRef, props, state]);
+  }, [svgRef, props, state])
 
   const changeTool = useCallback(
     (nextTool) => {
-      setState((state) => ({ ...state, tool: nextTool }));
+      setState((state) => ({ ...state, tool: nextTool }))
     },
     [setState]
-  );
+  )
 
   const changeValue = useCallback(
     (nextValue) => {
-      setState((state) => ({ ...state, value: nextValue }));
+      setState((state) => ({ ...state, value: nextValue }))
     },
     [setState]
-  );
+  )
 
   const fitSelection = useCallback(
     (x: number, y: number, width: number, height: number) => {
-      if (!svgRef.current) return;
-      svgRef.current.fitSelection(x, y, width, height);
+      if (!svgRef.current) return
+      svgRef.current.fitSelection(x, y, width, height)
     },
     [svgRef]
-  );
+  )
 
   useImperativeHandle(ref, () => ({
-    fitSelection,
-  }));
+    fitSelection
+  }))
 
   return (
     <ReactSVGPanZoom
@@ -69,10 +69,10 @@ const Viewer = React.forwardRef<any, Props>((props, ref) => {
       height={props.height}
       detectAutoPan={false}
       customToolbar={() => null}
-      background="white"
+      background='white'
       preventPanOutside={false}
       ref={svgRef as LegacyRef<ReactSVGPanZoom>}
-      tool="auto"
+      tool='auto'
       customMiniature={() => null}
       onChangeTool={(tool) => changeTool(tool)}
       value={state.value}
@@ -83,7 +83,7 @@ const Viewer = React.forwardRef<any, Props>((props, ref) => {
         {props.children}
       </svg>
     </ReactSVGPanZoom>
-  );
-});
+  )
+})
 
-export default Viewer;
+export default Viewer
