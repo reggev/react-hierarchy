@@ -6,7 +6,7 @@ import React, {
   useImperativeHandle,
   Ref
 } from 'react'
-import { stratify, tree, HierarchyNode } from 'd3-hierarchy'
+import { stratify, tree, hierarchy, HierarchyNode } from 'd3-hierarchy'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import defaultSpringConfig from './springConfig'
 import Viewer, { RefProps as ViewRefProps } from './View'
@@ -62,9 +62,13 @@ const Hierarchy = <T extends Record<string, unknown>>(
 ) => {
   const [isFirstRender, setIsFirstRender] = useState(true)
   const viewerRef = useRef<ViewRefProps>()
-  if (isFirstRender) setIsFirstRender(false)
+
+  if (isFirstRender) {
+    setIsFirstRender(false)
+  }
 
   const [collapsed, setCollapsed] = useState<string[]>([])
+
   const stratifier = useMemo(
     () =>
       stratify<T>()
@@ -117,8 +121,8 @@ const Hierarchy = <T extends Record<string, unknown>>(
       const dropChildren = (element: HierarchyNode<T>) => {
         // this method mutates the connections data!
         // for each collapsed node drop the children
-        // @ts-ignore
-        if (collapsedSet.has(element.data[nodeIdField])) {
+
+        if (collapsedSet.has(element.data[nodeIdField] as string)) {
           element.children = undefined
           return
         }
@@ -127,14 +131,11 @@ const Hierarchy = <T extends Record<string, unknown>>(
 
       if (!limitedConnections) dropChildren(connections)
 
-      // const hierarchyConnections = hierarchy(
-      //   limitedConnections || connections
-      // );
+      const hierarchyConnections = hierarchy(limitedConnections || connections)
 
       return {
         root: tree<T>().nodeSize([dx + nodeSpacing, dy + nodeSpacing])(
-          // hierarchyConnections
-          connections || limitedConnections
+          hierarchyConnections as unknown as HierarchyNode<T>
         ),
         parents
       }
@@ -237,7 +238,6 @@ const Hierarchy = <T extends Record<string, unknown>>(
               dy={dy}
             >
               <Links
-                nodeIdField={nodeIdField}
                 root={root}
                 dx={dx}
                 dy={dy}
@@ -245,7 +245,6 @@ const Hierarchy = <T extends Record<string, unknown>>(
                 springConfig={springConfig}
               />
               <Boxes
-                nodeIdField={nodeIdField}
                 Component={Component}
                 root={root}
                 dx={dx}

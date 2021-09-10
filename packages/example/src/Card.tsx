@@ -1,4 +1,4 @@
-import React, { useCallback, Fragment } from "react";
+import React, { useCallback } from "react";
 import styles from "./styles.module.scss";
 
 type Props = {
@@ -21,11 +21,13 @@ const Card = ({
   const handleClick = useCallback(() => {
     onClick(id);
   }, [onClick, id]);
+
   const handleCollapse = useCallback(() => {
     onCollapse(id);
   }, [onCollapse, id]);
+
   return (
-    <>
+    <div className={styles.contentBox}>
       <header
         className={styles.nodeHeaderContainer}
         data-node-rank={data.rank}
@@ -42,7 +44,7 @@ const Card = ({
           {isExpanded ? "-" : "+"}
         </button>
       )}
-    </>
+    </div>
   );
 };
 

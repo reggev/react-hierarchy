@@ -9,23 +9,20 @@ type Props<T> = {
   dy: number
   collapsed: string[]
   springConfig: SpringConfig
-  nodeIdField: keyof T & string
 }
 
 const Links = <T extends Record<string, unknown>>({
   root,
   dx,
   dy,
-  springConfig,
-  nodeIdField
+  springConfig
 }: Props<T>) => {
   const links = useMemo(() => root.links(), [root])
-
   return (
     <>
       {links.map(({ source, target }) => (
         <Link
-          key={`link-${source.data[nodeIdField]}-${target.data[nodeIdField]}`}
+          key={`link-${source.data.id}-${target.data.id}`}
           dx={dx}
           dy={dy}
           source={source as TreeNode<T>}

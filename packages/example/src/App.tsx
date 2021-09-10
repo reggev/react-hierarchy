@@ -12,18 +12,19 @@ const App = () => {
   const hierarchyRef = useRef();
   const handleClick = useCallback(
     (id) => {
-      setData((state) => {
-        const tmp = state
-          .map((item) =>
-            item.name === id ? { ...item, rank: item.rank + 1 } : item
-          )
-          .filter((item) => item.rank <= 5);
-        const parents = new Set(tmp.map((item) => item.name));
+      console.log(id);
+      // setData((state) => {
+      //   const tmp = state
+      //     .map((item) =>
+      //       item.name === id ? { ...item, rank: item.rank + 1 } : item
+      //     )
+      //     .filter((item) => item.rank <= 5);
+      //   const parents = new Set(tmp.map((item) => item.name));
 
-        return tmp.filter(
-          (item) => parents.has(item.CustomParentId) || !item.CustomParentId
-        );
-      });
+      //   return tmp.filter(
+      //     (item) => parents.has(item.CustomParentId) || !item.CustomParentId
+      //   );
+      // });
     },
     [setData]
   );
