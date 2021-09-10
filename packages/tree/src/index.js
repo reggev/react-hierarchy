@@ -6,8 +6,8 @@ import React, {
   useImperativeHandle
 } from 'react'
 import PropTypes from 'prop-types'
-import { stratify, hierarchy, tree } from 'd3'
-import { AutoSizer } from 'react-virtualized'
+import { stratify, hierarchy, tree } from 'd3-hierarchy'
+import AutoSizer from 'react-virtualized-auto-sizer'
 import defaultSpringConfig from './springConfig'
 import Viewer from './Viewer'
 import Boxes from './Boxes'
@@ -16,7 +16,7 @@ import Links from './Links'
 /**
  *  @typedef {import('d3-hierarchy').HierarchyNode} HierarchyNode
  *  @typedef {HierarchyNode & {x: number, y:number }} TreeNode
- *  @typedef {import('react-spring').SpringConfig} SpringConfig
+ *  @typedef {import('@react-spring/web').SpringConfig} SpringConfig
  * */
 
 const defaultPadding = {

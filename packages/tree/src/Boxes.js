@@ -1,6 +1,6 @@
 import React, { useMemo, Fragment } from 'react'
 import PropTypes from 'prop-types'
-import { animated, useTransition } from 'react-spring'
+import { animated, useTransition } from '@react-spring/web'
 import styles from './styles.module.scss'
 
 /**
@@ -16,7 +16,7 @@ import styles from './styles.module.scss'
  *  collapsed: string[],
  *  Component: React.ReactType,
  *  boxStyle?: string,
- *  springConfig: import('react-spring').SpringConfig,
+ *  springConfig: import('@react-spring/web').SpringConfig,
  *  nodeIdField: string
  * }} props */
 const Boxes = ({

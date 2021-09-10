@@ -4,13 +4,13 @@ import Link from './Link'
 
 /**
  * @typedef {import('./index').TreeNode} TreeNode
- * @typedef {import("d3").HierarchyNode} HierarchyNode
+ * @typedef {import("d3-hierarchy").HierarchyNode} HierarchyNode
  * @param {{
  *  root: TreeNode,
  *  dx:number,
  *  dy:number,
  *  collapsed: string[],
- *  springConfig: import('react-spring').SpringConfig,
+ *  springConfig: import('@react-spring/web').SpringConfig,
  * nodeIdField: string
  * }} props */
 const Links = ({ root, dx, dy, springConfig, nodeIdField }) => {

@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { useSpring, animated } from 'react-spring'
+import { useSpring, animated } from '@react-spring/web'
 
 /**
  * @typedef {import('./index').TreeNode} TreeNode
@@ -10,7 +10,7 @@ import { useSpring, animated } from 'react-spring'
  *  target: TreeNode
  *  dx:number,
  *  dy:number,
- *  springConfig: import('react-spring').SpringConfig
+ *  springConfig: import('@react-spring/web').SpringConfig
  * }} props */
 const Link = ({ source, target, dx, dy, springConfig }) => {
   const { x: parentX, y: parentY } = source
