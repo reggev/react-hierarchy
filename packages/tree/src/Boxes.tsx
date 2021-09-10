@@ -39,7 +39,6 @@ const Boxes = <T extends object>({
   springConfig,
   nodeIdField,
 }: Props<T>) => {
-  const parentSet = useMemo(() => new Set(parents), [parents]);
   const elements = useMemo(() => root.descendants(), [root]);
   // const transitions = useTransition<T>(
   //   elements,
@@ -70,6 +69,7 @@ const Boxes = <T extends object>({
           height={dy}
           style={{ overflow: "visible" }}
           xmlns="http://www.w3.org/1999/xhtml"
+          key={`box-${el.id}`}
         >
           <div
             className={`${styles.contentBox} ${boxStyle}`}
@@ -92,20 +92,7 @@ const Boxes = <T extends object>({
   );
 };
 
-Boxes.propTypes = {
-  root: PropTypes.shape({
-    descendants: PropTypes.func.isRequired,
-  }).isRequired,
-  dx: PropTypes.number.isRequired,
-  dy: PropTypes.number.isRequired,
-  parents: PropTypes.instanceOf(Set),
-  onClick: PropTypes.func.isRequired,
-  onCollapse: PropTypes.func.isRequired,
-  Component: PropTypes.elementType.isRequired,
-  nodeIdField: PropTypes.string.isRequired,
-  boxStyle: PropTypes.string,
-  springConfig: PropTypes.object,
-};
+Boxes.propTypes = {};
 Boxes.defaultProps = {
   boxStyle: "",
 };

@@ -25,7 +25,7 @@ const Card = ({
     onCollapse(id);
   }, [onCollapse, id]);
   return (
-    <Fragment>
+    <>
       <header
         className={styles.nodeHeaderContainer}
         data-node-rank={data.rank}
@@ -42,7 +42,7 @@ const Card = ({
           {isExpanded ? "-" : "+"}
         </button>
       )}
-    </Fragment>
+    </>
   );
 };
 
