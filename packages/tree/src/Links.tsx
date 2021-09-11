@@ -11,12 +11,12 @@ type Props<T> = {
   springConfig: SpringConfig
 }
 
-const Links = <T extends Record<string, unknown>>({
+function Links<T extends Record<string, unknown>>({
   root,
   dx,
   dy,
   springConfig
-}: Props<T>) => {
+}: Props<T>) {
   const links = useMemo(() => root.links(), [root])
   return (
     <>

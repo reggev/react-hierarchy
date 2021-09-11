@@ -1,15 +1,7 @@
 import React, { useCallback } from "react";
 import styles from "./styles.module.scss";
-
-type Props = {
-  id: string;
-  data: { rank: number; name: string };
-  onClick: (id: string) => void;
-  onCollapse: (id: string) => void;
-  showExpand: boolean;
-  isExpanded: boolean;
-};
-
+import { ComponentProps } from "@reggev/react-hierarchy-tree";
+import { Data } from "./App";
 const Card = ({
   id,
   data,
@@ -17,7 +9,7 @@ const Card = ({
   onCollapse,
   showExpand,
   isExpanded,
-}: Props) => {
+}: ComponentProps<Data>) => {
   const handleClick = useCallback(() => {
     onClick(id);
   }, [onClick, id]);

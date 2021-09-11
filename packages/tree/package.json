@@ -4,20 +4,22 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/tree.umd.js",
-  "module": "./dist/tree.es.js",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
   "exports": {
     ".": {
-      "import": "./dist/tree.es.js",
-      "require": "./dist/tree.umd.js"
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js"
     }
   },
   "type": "module",
+  "types": "dist/index.d.ts",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "rm -r ./dist && tsc && vite build",
     "test:typescript": "tsc",
-    "serve": "vite preview"
+    "serve": "vite preview",
+    "test": "jest"
   },
   "dependencies": {
     "@react-spring/web": "^9.2.4",
@@ -29,7 +31,9 @@
   },
   "devDependencies": {
     "@rollup/plugin-babel": "^5.3.0",
+    "@testing-library/react": "^12.1.0",
     "@types/d3-hierarchy": "^3.0.2",
+    "@types/jest": "^27.0.1",
     "@types/node": "^16.9.1",
     "@types/react": "^17.0.0",
     "@types/react-dom": "^17.0.0",
@@ -43,15 +47,18 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-config-standard-react": "^11.0.1",
+    "eslint-plugin-jest": "^24.4.0",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-promise": "^5.1.0",
     "eslint-plugin-react": "^7.25.1",
     "eslint-plugin-react-hooks": "^4.2.0",
     "eslint-plugin-standard": "^5.0.0",
     "husky": "^7.0.2",
+    "jest": "^27.1.1",
     "lint-staged": "^11.1.2",
     "prettier": "^2.4.0",
     "rollup-plugin-typescript2": "^0.30.0",
+    "ts-node": "^10.2.1",
     "typescript": "^4.3.2",
     "vite": "^2.5.4"
   },

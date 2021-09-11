@@ -12,9 +12,14 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react"
+    "declaration": true,
+    "emitDeclarationOnly": true,
+    // "outFile": "dist/declarations/index.d.ts",
+    // "declarationDir": "dist/declarations",
+    "outDir": "./dist/",
+    "jsx": "react",
+    "types": ["react", "jest"],
+    "sourceMap": true
   },
   "include": ["./src"]
 }

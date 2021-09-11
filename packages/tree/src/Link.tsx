@@ -10,7 +10,7 @@ type Props<T> = {
   springConfig: SpringConfig
 }
 
-const Link = <T extends Record<string, unknown>>({
+const Link = <T extends Record<string, any>>({
   source,
   target,
   dx,
@@ -19,7 +19,10 @@ const Link = <T extends Record<string, unknown>>({
 }: Props<T>) => {
   const { x: parentX, y: parentY } = source
   const { x: childX, y: childY } = target
-
+  /**
+   * referenced with great thanks from:
+   * https://bl.ocks.org/bumbeishvili/09a03b81ae788d2d14f750afe59eb7de
+   * */
   const xrvs = parentX - childX < 0 ? -1 : 1
   const yrvs = parentY - childY < 0 ? -1 : 1
   const rdef = 35
@@ -51,8 +54,6 @@ const Link = <T extends Record<string, unknown>>({
     },
     config: springConfig
   })
-  // @ts-ignore
-  const { d } = props
 
   return (
     <animated.path
@@ -60,7 +61,7 @@ const Link = <T extends Record<string, unknown>>({
       stroke='black'
       fill='none'
       strokeWidth={2}
-      d={d}
+      d={props.d}
     />
   )
 }

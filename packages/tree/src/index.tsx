@@ -3,8 +3,7 @@ import React, {
   useState,
   useCallback,
   useRef,
-  useImperativeHandle,
-  Ref
+  useImperativeHandle
 } from 'react'
 import { stratify, tree, hierarchy, HierarchyNode } from 'd3-hierarchy'
 import AutoSizer from 'react-virtualized-auto-sizer'
@@ -23,32 +22,40 @@ const defaultPadding = {
   right: 0
 }
 
+export type ComponentProps<T> = {
+  data: T
+  onClick: (id: string) => void
+  id: string
+  onCollapse: (id: string) => void
+  showExpand: boolean
+  isExpanded: boolean
+}
+
 type Props<T> = {
   data: T[]
-  Component: any
-  onClick?: (e: Event) => void
+  Component: React.ComponentType<ComponentProps<T>>
+  onClick?: (id: string) => void
   boxStyle?: string
   nodeHeight?: number
   nodeWidth?: number
   nodeSpacing?: number
   springConfig?: SpringConfig
-  nodeIdField: keyof T & string
-  parentIdField: keyof T & string
+  nodeIdField: keyof T
+  parentIdField: keyof T
   maxInitialDepth?: number
   padding?: Partial<typeof defaultPadding>
 }
 
-export type RefProps = Ref<{
+export type RefProps = {
   collapseAll: () => void
   zoomExtends: () => void
-}>
+}
 
-const Hierarchy = <T extends Record<string, unknown>>(
+function Hierarchy<T extends Record<string, unknown>>(
   {
     data,
     onClick = () => undefined,
     Component,
-    boxStyle = '',
     nodeHeight: dy = 320,
     nodeWidth: dx = 500,
     nodeSpacing = 150,
@@ -58,8 +65,8 @@ const Hierarchy = <T extends Record<string, unknown>>(
     maxInitialDepth = 2,
     padding
   }: Props<T>,
-  ref: RefProps
-) => {
+  ref: React.Ref<RefProps>
+) {
   const [isFirstRender, setIsFirstRender] = useState(true)
   const viewerRef = useRef<ViewRefProps>()
 
@@ -121,7 +128,6 @@ const Hierarchy = <T extends Record<string, unknown>>(
       const dropChildren = (element: HierarchyNode<T>) => {
         // this method mutates the connections data!
         // for each collapsed node drop the children
-
         if (collapsedSet.has(element.data[nodeIdField] as string)) {
           element.children = undefined
           return
@@ -253,7 +259,6 @@ const Hierarchy = <T extends Record<string, unknown>>(
                 parents={parents as unknown as Set<string>}
                 onClick={onClick}
                 onCollapse={handleClick}
-                boxStyle={boxStyle}
                 springConfig={springConfig}
               />
             </Viewer>
@@ -262,6 +267,12 @@ const Hierarchy = <T extends Record<string, unknown>>(
       </AutoSizer>
     </div>
   )
+}
+
+declare module 'react' {
+  function forwardRef<T, P = unknown>(
+    render: (props: P, ref: React.Ref<T>) => React.ReactElement | null
+  ): (props: P & React.RefAttributes<T>) => React.ReactElement | null
 }
 
 export default React.forwardRef(Hierarchy)

@@ -1,16 +1,17 @@
-import { defineConfig } from "vite";
-import reactRefresh from "@vitejs/plugin-react-refresh";
-import typescript2 from "rollup-plugin-typescript2";
+import { defineConfig } from 'vite'
+import reactRefresh from '@vitejs/plugin-react-refresh'
 
-import path from "path";
+import path from 'path'
 // https://vitejs.dev/config/
 export default defineConfig({
   build: {
     lib: {
-      entry: path.resolve(__dirname, "src/index.tsx"),
-      name: "tree",
-      fileName: (format) => `tree.${format}.js`,
+      entry: path.resolve(__dirname, 'src/index.tsx'),
+      name: 'index',
+      fileName: (format) => `index.${format}.js`
     },
+    sourcemap: true,
+    emptyOutDir: false,
     rollupOptions: {
       // make sure to externalize deps that shouldn't be bundled
       // into your library
@@ -24,9 +25,5 @@ export default defineConfig({
       }
     }
   },
-
-  plugins: [
-    reactRefresh(),
-    // { ...typescript2(), apply: "build" }
-  ],
-});
+  plugins: [reactRefresh()]
+})

@@ -21,7 +21,7 @@ export type RefProps = {
   fitSelection: (x: number, y: number, width: number, height: number) => void
 }
 
-const Viewer = React.forwardRef<any, Props>((props, ref) => {
+function Viewer(props: Props, ref: React.Ref<RefProps>) {
   const [state, setState] = useState({
     tool: TOOL_AUTO,
     value: {} as Value,
@@ -38,16 +38,12 @@ const Viewer = React.forwardRef<any, Props>((props, ref) => {
   }, [svgRef, props, state])
 
   const changeTool = useCallback(
-    (nextTool) => {
-      setState((state) => ({ ...state, tool: nextTool }))
-    },
+    (nextTool) => setState((state) => ({ ...state, tool: nextTool })),
     [setState]
   )
 
   const changeValue = useCallback(
-    (nextValue) => {
-      setState((state) => ({ ...state, value: nextValue }))
-    },
+    (nextValue) => setState((state) => ({ ...state, value: nextValue })),
     [setState]
   )
 
@@ -59,9 +55,12 @@ const Viewer = React.forwardRef<any, Props>((props, ref) => {
     [svgRef]
   )
 
-  useImperativeHandle(ref, () => ({
-    fitSelection
-  }))
+  useImperativeHandle(
+    ref,
+    (): RefProps => ({
+      fitSelection
+    })
+  )
 
   return (
     <ReactSVGPanZoom
@@ -84,6 +83,6 @@ const Viewer = React.forwardRef<any, Props>((props, ref) => {
       </svg>
     </ReactSVGPanZoom>
   )
-})
+}
 
-export default Viewer
+export default React.forwardRef<any, Props>(Viewer)

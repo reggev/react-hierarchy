@@ -1,15 +1,24 @@
 import React, { useCallback, useState, useRef } from "react";
-import Hierarchy from "@reggev/react-hierarchy-tree";
-// import 'react-hierarchy/dist/index.css'
+import Hierarchy, { RefProps } from "@reggev/react-hierarchy-tree";
 import "./App.css";
 import Card from "./Card";
 import styles from "./styles.module.scss";
 import rawData from "./data.json";
 
+export type Data = {
+  rank: number;
+  customId: string;
+  CustomParentId: string;
+  name: string;
+};
+
 const App = () => {
   const [data, setData] = useState(rawData);
 
-  const hierarchyRef = useRef();
+  const hierarchyRef = useRef<RefProps>();
+  if (hierarchyRef.current) {
+    hierarchyRef.current;
+  }
   const handleClick = useCallback(
     (id) => {
       console.log(id);
@@ -48,13 +57,13 @@ const App = () => {
         <button onClick={zoomExtends}>zoom extends</button>
       </div>
       <Hierarchy
-        maxInitialDepth={1}
+        maxInitialDepth={3}
         data={data}
         onClick={handleClick}
         Component={Card}
         nodeIdField="customId"
         parentIdField="CustomParentId"
-        ref={hierarchyRef}
+        ref={hierarchyRef as React.Ref<RefProps>}
         padding={{ top: 600 }}
       />
     </div>
