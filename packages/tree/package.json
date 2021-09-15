@@ -74,13 +74,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/reggev/hierarchy.git"
+    "url": "git+https://github.com/reggev/react-hierarchy.git"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Reggev",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/reggev/hierarchy/issues"
+    "url": "https://github.com/reggev/react-hierarchy/issues"
   },
-  "homepage": "https://github.com/reggev/hierarchy#readme",
+  "homepage": "https://github.com/reggev/react-hierarchy#readme",
   "description": ""
 }
