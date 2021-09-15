@@ -226,46 +226,39 @@ function Hierarchy<T extends Record<string, unknown>>(
   }))
 
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%'
-      }}
-    >
-      <AutoSizer>
-        {({ width, height }) =>
-          width === 0 || height === 0 ? null : (
-            <Viewer
-              height={height}
-              width={width}
-              ref={viewerRef}
-              onMount={zoomExtends}
+    <AutoSizer>
+      {({ width, height }) =>
+        width === 0 || height === 0 ? null : (
+          <Viewer
+            height={height}
+            width={width}
+            ref={viewerRef}
+            onMount={zoomExtends}
+            dx={dx}
+            dy={dy}
+          >
+            <Links
+              root={root}
               dx={dx}
               dy={dy}
-            >
-              <Links
-                root={root}
-                dx={dx}
-                dy={dy}
-                collapsed={collapsed}
-                springConfig={springConfig}
-              />
-              <Boxes
-                Component={Component}
-                root={root}
-                dx={dx}
-                dy={dy}
-                collapsed={collapsed}
-                parents={parents as unknown as Set<string>}
-                onClick={onClick}
-                toggleCollapse={handleToggleCollapse}
-                springConfig={springConfig}
-              />
-            </Viewer>
-          )
-        }
-      </AutoSizer>
-    </div>
+              collapsed={collapsed}
+              springConfig={springConfig}
+            />
+            <Boxes
+              Component={Component}
+              root={root}
+              dx={dx}
+              dy={dy}
+              collapsed={collapsed}
+              parents={parents as unknown as Set<string>}
+              onClick={onClick}
+              toggleCollapse={handleToggleCollapse}
+              springConfig={springConfig}
+            />
+          </Viewer>
+        )
+      }
+    </AutoSizer>
   )
 }
 

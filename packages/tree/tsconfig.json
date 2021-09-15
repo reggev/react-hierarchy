@@ -1,11 +1,16 @@
 {
+  "ts-node": {
+    "moduleTypes": {
+      "jest.config.ts": "cjs"
+    }
+  },
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": false,
     "skipLibCheck": false,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
@@ -14,12 +19,10 @@
     "resolveJsonModule": true,
     "declaration": true,
     "emitDeclarationOnly": true,
-    // "outFile": "dist/declarations/index.d.ts",
-    // "declarationDir": "dist/declarations",
     "outDir": "./dist/",
     "jsx": "react",
     "types": ["react", "jest"],
     "sourceMap": true
   },
-  "include": ["./src"]
+  "include": ["./src", "./test/"]
 }
