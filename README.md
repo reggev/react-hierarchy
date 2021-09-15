@@ -32,8 +32,8 @@ the ref contains 2 methods:
 - `id`, set by your custom id (defaults to `id`)
 - `data` - an object which includes all the properties of that data row
 - `onClick` - can be used to pass events back to the root
-- `onCollapse` - collapse/expand a node
-- `showExpand` - a boolean expressing if the node has children
+- `toggleCollapse` - collapse/expand a node
+- `hasChildren` - a boolean expressing if the node has children
 - `isExpanded` - a boolean expressing if the node is expanded
 
 # using typescript
@@ -72,15 +72,15 @@ const rawData: Data[] = [
 ];
 
 
-const Card = ({ id, isExpanded, showExpand, data }: ComponentProps<Data>) => {
+const Card = ({ id, isExpanded, hasChildren, toggleCollapse, data }: ComponentProps<Data>) => {
   const handleCollapse = useCallback(() => {
-    onCollapse(id);
+    toggleCollapse(id);
   }, [onCollapse, id]);
 
   return (
-    <div data-id={id}>
+    <div data-id={id} className="my-own-class">
       <h1>{data.name}</h1>
-      {showExpand && (
+      {hasChildren && (
         <button onCollapse>{isExpanded ? "collapse" : "expand"}</button>
       )}
     </div>
@@ -90,16 +90,22 @@ const Card = ({ id, isExpanded, showExpand, data }: ComponentProps<Data>) => {
 const App = () => {
   const hierarchyRef = useRef<RefProps>();
   return (
-    <div className="App">
-      <Hierarchy
-        data={data} // a collection of objects
-        Component={Card} // you can find an example card in the example directory
-        nodeIdField="customId" // defaults to "id"
-        parentIdField="parentId" // defaults to "parentId"
-        ref={hierarchyRef as React.Ref<RefProps>}
-      />
-      <button onClick={hierarchyRef?.current?.collapseAll?.())}>collapse all</button>
-    </div>
+    <main>
+      <div className="my-custom-hierarchy-container">
+        <Hierarchy
+          data={data} // a collection of objects
+          Component={Card} // you can find an example card in the example directory
+          nodeIdField="customId" // defaults to "id"
+          parentIdField="parentId" // defaults to "parentId"
+          ref={hierarchyRef as React.Ref<RefProps>}
+        />
+      </div>
+      <button
+        className="my-custom-button"
+        onClick={hierarchyRef?.current?.collapseAll?.())}>
+        collapse all
+      </button>
+    </main>
   );
 };
 ```

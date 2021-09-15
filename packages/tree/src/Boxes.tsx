@@ -6,7 +6,7 @@ type Props<T> = {
   root: TreeNode<T>
   parents: Set<string>
   onClick: (id: string) => void
-  onCollapse: (id: string) => void
+  toggleCollapse: (id: string) => void
   dx: number
   dy: number
   collapsed: string[]
@@ -20,7 +20,7 @@ function Boxes<T extends Record<string, unknown>>({
   dy,
   parents,
   onClick,
-  onCollapse,
+  toggleCollapse,
   Component,
   springConfig
 }: Props<T>) {
@@ -57,8 +57,8 @@ function Boxes<T extends Record<string, unknown>>({
               data={item.data.data as unknown as T}
               onClick={onClick}
               id={item.data.id as string}
-              onCollapse={onCollapse}
-              showExpand={parents.has(item.data.id as string)}
+              toggleCollapse={toggleCollapse}
+              hasChildren={parents.has(item.data.id as string)}
               isExpanded={(item.children?.length ?? 0) > 0}
             />
           </foreignObject>

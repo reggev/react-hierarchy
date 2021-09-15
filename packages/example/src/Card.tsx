@@ -6,8 +6,8 @@ const Card = ({
   id,
   data,
   onClick,
-  onCollapse,
-  showExpand,
+  toggleCollapse,
+  hasChildren,
   isExpanded,
 }: ComponentProps<Data>) => {
   const handleClick = useCallback(() => {
@@ -15,8 +15,8 @@ const Card = ({
   }, [onClick, id]);
 
   const handleCollapse = useCallback(() => {
-    onCollapse(id);
-  }, [onCollapse, id]);
+    toggleCollapse(id);
+  }, [toggleCollapse, id]);
 
   return (
     <div className={styles.contentBox}>
@@ -31,7 +31,7 @@ const Card = ({
       <footer className={styles.nodeFooter} data-node-rank={data.rank}>
         <p>this is the end of the card</p>
       </footer>
-      {showExpand && (
+      {hasChildren && (
         <button className={styles.expandButton} onClick={handleCollapse}>
           {isExpanded ? "-" : "+"}
         </button>

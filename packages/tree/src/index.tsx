@@ -26,8 +26,8 @@ export type ComponentProps<T> = {
   data: T
   onClick: (id: string) => void
   id: string
-  onCollapse: (id: string) => void
-  showExpand: boolean
+  toggleCollapse: (id: string) => void
+  hasChildren: boolean
   isExpanded: boolean
 }
 
@@ -84,7 +84,7 @@ function Hierarchy<T extends Record<string, unknown>>(
     [nodeIdField, parentIdField]
   )
 
-  const handleClick = useCallback(
+  const handleToggleCollapse = useCallback(
     (id) =>
       setCollapsed((state) =>
         state.includes(id)
@@ -258,7 +258,7 @@ function Hierarchy<T extends Record<string, unknown>>(
                 collapsed={collapsed}
                 parents={parents as unknown as Set<string>}
                 onClick={onClick}
-                onCollapse={handleClick}
+                toggleCollapse={handleToggleCollapse}
                 springConfig={springConfig}
               />
             </Viewer>
