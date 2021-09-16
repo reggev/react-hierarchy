@@ -21,7 +21,7 @@
     "emitDeclarationOnly": true,
     "outDir": "./dist/",
     "jsx": "react",
-    "types": ["react", "jest"],
+    "types": ["react", "jest", "node"],
     "sourceMap": true
   },
   "include": ["./src", "./test/"]

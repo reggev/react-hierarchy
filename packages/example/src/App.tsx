@@ -4,6 +4,7 @@ import "./App.css";
 import Card from "./Card";
 import styles from "./styles.module.scss";
 import rawData from "./data.json";
+import AutoSizer from "react-virtualized-auto-sizer";
 
 export type Data = {
   rank: number;
@@ -56,16 +57,26 @@ const App = () => {
         <button onClick={onCollapse}>collapse all</button>
         <button onClick={zoomExtends}>zoom extends</button>
       </div>
-      <Hierarchy
-        maxInitialDepth={3}
-        data={data}
-        onClick={handleClick}
-        Component={Card}
-        nodeIdField="customId"
-        parentIdField="CustomParentId"
-        ref={hierarchyRef as React.Ref<RefProps>}
-        padding={{ top: 600 }}
-      />
+      <div style={{ flex: 1 }}>
+        <AutoSizer>
+          {({ height, width }) =>
+            height === 0 || width === 0 ? null : (
+              <Hierarchy
+                maxInitialDepth={3}
+                data={data}
+                onClick={handleClick}
+                Component={Card}
+                nodeIdField="customId"
+                parentIdField="CustomParentId"
+                ref={hierarchyRef as React.Ref<RefProps>}
+                padding={{ top: 600 }}
+                height={height}
+                width={width}
+              />
+            )
+          }
+        </AutoSizer>
+      </div>
     </div>
   );
 };

@@ -1,37 +1,35 @@
 import React from 'react'
 import { render as RTLRender } from '@testing-library/react'
-import Hierarchy from '../src/index'
+import Hierarchy, { HierarchyProps } from '../src/index'
 import Card from './fixtures/Card'
 import defaultData from './fixtures/data'
 import '@testing-library/jest-dom'
 
-function render(data = defaultData, rootId = '1') {
+async function render({
+  overrides = {},
+  data = defaultData
+}: { overrides?: Partial<HierarchyProps<any>>; data?: Array<any> } = {}) {
   const queries = RTLRender(
-    <div
-      data-testId='hierarchy-container'
-      style={{
-        width: '100%',
-        height: '100%'
-      }}
-    >
-      <Hierarchy
-        data={data}
-        Component={Card}
-        nodeIdField='id'
-        parentIdField='parentId'
-      />
-    </div>
+    <Hierarchy
+      data={data}
+      Component={Card}
+      nodeIdField='id'
+      parentIdField='parentId'
+      height={1000}
+      width={1000}
+      maxInitialDepth={Infinity}
+      {...overrides}
+    />
   )
-
+  const nodes = queries.getAllByTestId(/card-\d+$/)
   return {
-    queries
+    queries,
+    nodes
   }
 }
 describe('hierarchy', () => {
   test('render all the elements', async () => {
-    const { queries } = render()
-    queries.debug()
-    const rootContainer = queries.getByTestId('hierarchy-container')
-    expect(rootContainer).toBeInTheDocument()
+    const { nodes } = await render()
+    expect(nodes.length).toEqual(defaultData.length)
   })
 })

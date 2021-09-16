@@ -6,13 +6,11 @@ import React, {
   useImperativeHandle
 } from 'react'
 import { stratify, tree, hierarchy, HierarchyNode } from 'd3-hierarchy'
-import AutoSizer from 'react-virtualized-auto-sizer'
 import defaultSpringConfig from './springConfig'
 import Viewer, { RefProps as ViewRefProps } from './View'
 import Boxes from './Boxes'
 import Links from './Links'
 import { SpringConfig } from '@react-spring/web'
-
 export type TreeNode<T> = HierarchyNode<T> & { x: number; y: number }
 
 const defaultPadding = {
@@ -31,7 +29,7 @@ export type ComponentProps<T> = {
   isExpanded: boolean
 }
 
-type Props<T> = {
+export type HierarchyProps<T> = {
   data: T[]
   Component: React.ComponentType<ComponentProps<T>>
   onClick?: (id: string) => void
@@ -44,6 +42,8 @@ type Props<T> = {
   parentIdField: keyof T
   maxInitialDepth?: number
   padding?: Partial<typeof defaultPadding>
+  height: number
+  width: number
 }
 
 export type RefProps = {
@@ -63,8 +63,10 @@ function Hierarchy<T extends Record<string, unknown>>(
     nodeIdField,
     parentIdField,
     maxInitialDepth = 2,
-    padding
-  }: Props<T>,
+    padding,
+    height,
+    width
+  }: HierarchyProps<T>,
   ref: React.Ref<RefProps>
 ) {
   const [isFirstRender, setIsFirstRender] = useState(true)
@@ -226,39 +228,33 @@ function Hierarchy<T extends Record<string, unknown>>(
   }))
 
   return (
-    <AutoSizer>
-      {({ width, height }) =>
-        width === 0 || height === 0 ? null : (
-          <Viewer
-            height={height}
-            width={width}
-            ref={viewerRef}
-            onMount={zoomExtends}
-            dx={dx}
-            dy={dy}
-          >
-            <Links
-              root={root}
-              dx={dx}
-              dy={dy}
-              collapsed={collapsed}
-              springConfig={springConfig}
-            />
-            <Boxes
-              Component={Component}
-              root={root}
-              dx={dx}
-              dy={dy}
-              collapsed={collapsed}
-              parents={parents as unknown as Set<string>}
-              onClick={onClick}
-              toggleCollapse={handleToggleCollapse}
-              springConfig={springConfig}
-            />
-          </Viewer>
-        )
-      }
-    </AutoSizer>
+    <Viewer
+      height={height}
+      width={width}
+      ref={viewerRef}
+      onMount={zoomExtends}
+      dx={dx}
+      dy={dy}
+    >
+      <Links
+        root={root}
+        dx={dx}
+        dy={dy}
+        collapsed={collapsed}
+        springConfig={springConfig}
+      />
+      <Boxes
+        Component={Component}
+        root={root}
+        dx={dx}
+        dy={dy}
+        collapsed={collapsed}
+        parents={parents as unknown as Set<string>}
+        onClick={onClick}
+        toggleCollapse={handleToggleCollapse}
+        springConfig={springConfig}
+      />
+    </Viewer>
   )
 }
 

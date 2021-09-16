@@ -1,7 +1,7 @@
 # react-hierarchy
 
 > A native React hierarchy chart
-> this project uses d3 for layout, react-spring for animations, react-virtualized-auto-sizer & react-svg-pan-zoom to manage the svg container.
+> this project uses d3 for layout, react-spring for animations & react-svg-pan-zoom to manage the svg container.
 
 ## Install
 
@@ -11,11 +11,11 @@ npm install --save react-hierarchy
 
 ## components over configurations
 
-The idea is to provide a component that handles **layout only**, no more giant - yet limited config objects. you provide your own `Card` component, and `Hierarchy` will place it on an `svg` viewport for you.
+The idea is to provide a component that handles **layout only**, no more giant - yet limited config objects. you provide **your own** `Card` component, and `Hierarchy` will place it on an `svg` viewport for you.
 
 # viewport
 
-The viewport is an `SVG` tag and is managed by `react-svg-pan-zoom`, it is autoscaled to fit its parent's size using `react-virtualized-auto-sizer` - simply place it inside any HTML element you would like in it'll fit right in.
+The viewport is an `svg` tag and is managed by `react-svg-pan-zoom`.
 
 [![NPM](https://img.shields.io/npm/v/react-hierarchy.svg)](https://www.npmjs.com/package/react-hierarchy) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 

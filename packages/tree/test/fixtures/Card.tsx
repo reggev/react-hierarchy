@@ -19,14 +19,14 @@ const Card = ({
   }, [toggleCollapse, id])
 
   return (
-    <div data-id={id}>
+    <div data-testid={`card-${id}`}>
       <header data-node-rank={data.rank} onClick={handleClick}>
-        <h1 data-testId={`card-${id}-header`}>{data.name}</h1>
+        <h1 data-testid={`card-${id}-header`}>{data.name}</h1>
       </header>
-      <p data-testId={`card-${id}-payload`}>{data.rank}</p>
+      <p data-testid={`card-${id}-payload`}>{data.rank}</p>
       {hasChildren && (
         <button
-          data-testId={`card-${id}-collapse-button`}
+          data-testid={`card-${id}-collapse-button`}
           onClick={handleCollapse}
         >
           {isExpanded ? '-' : '+'}
