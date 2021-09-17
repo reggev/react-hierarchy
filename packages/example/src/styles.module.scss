@@ -11,3 +11,24 @@
 .foreignObject {
   overflow: visible;
 }
+
+
+[data-rank="0"] {
+  background: #e94747;
+}
+
+[data-rank="1"] {
+  background: #e9a347;
+}
+
+[data-rank="2"] {
+  background: #e6e947;
+}
+
+[data-rank="3"] {
+  background: #cbe947;
+}
+
+[data-rank="4"] {
+  background: #7ae947;
+}

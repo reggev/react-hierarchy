@@ -1,51 +1,60 @@
-import React, { useCallback, useState, useRef } from "react";
+import React, { useCallback, useState, useRef, useMemo } from "react";
 import Hierarchy, { RefProps } from "@reggev/react-hierarchy-tree";
 import "./App.css";
 import Card from "./Card";
 import styles from "./styles.module.scss";
 import rawData from "./data.json";
 import AutoSizer from "react-virtualized-auto-sizer";
+import { recursiveNodeRemove } from "./recursiveNodeRemove";
 
 export type Data = {
   rank: number;
-  customId: string;
-  CustomParentId: string;
+  id: string;
+  parentId: string;
   name: string;
 };
 
 const App = () => {
   const [data, setData] = useState(rawData);
-
+  const rootNode = useMemo(() => data.find((node) => !node.parentId), [data]);
   const hierarchyRef = useRef<RefProps>();
 
   const handleClick = useCallback(
     (id) => {
-      console.log(id);
-      // setData((state) => {
-      //   const tmp = state
-      //     .map((item) =>
-      //       item.name === id ? { ...item, rank: item.rank + 1 } : item
-      //     )
-      //     .filter((item) => item.rank <= 5);
-      //   const parents = new Set(tmp.map((item) => item.name));
+      setData((state) => {
+        const nextRanks = state.map((item) => {
+          if (item.id !== id) return item;
+          const nextRank = item.rank - 1;
 
-      //   return tmp.filter(
-      //     (item) => parents.has(item.CustomParentId) || !item.CustomParentId
-      //   );
-      // });
+          if (id === rootNode?.id) {
+            return { ...item, rank: Math.max(nextRank, 0) };
+          }
+
+          return { ...item, rank: nextRank };
+        });
+
+        const nodeToRemove = nextRanks.find((node) => node.rank < 0);
+
+        if (nodeToRemove) {
+          const idsToRemove = new Set(
+            recursiveNodeRemove(nodeToRemove.id, state)
+          );
+          return nextRanks.filter((item) => !idsToRemove.has(item.id));
+        } else {
+          return nextRanks;
+        }
+      });
     },
     [setData]
   );
 
   const onCollapse = useCallback(() => {
     if (hierarchyRef.current) {
-      // @ts-ignore
       hierarchyRef.current.collapseAll();
     }
   }, [hierarchyRef]);
 
   const zoomExtends = useCallback(() => {
-    // @ts-ignore
     if (hierarchyRef.current) hierarchyRef.current.zoomExtends();
   }, [hierarchyRef]);
 
@@ -64,8 +73,8 @@ const App = () => {
                 data={data}
                 onClick={handleClick}
                 Component={Card}
-                nodeIdField="customId"
-                parentIdField="CustomParentId"
+                nodeIdField="id"
+                parentIdField="parentId"
                 ref={hierarchyRef as React.Ref<RefProps>}
                 padding={{ top: 600 }}
                 height={height}
