@@ -5,7 +5,7 @@ import Card from "./Card";
 import styles from "./styles.module.scss";
 import rawData from "./data.json";
 import AutoSizer from "react-virtualized-auto-sizer";
-import { recursiveNodeRemove } from "./recursiveNodeRemove";
+import { removeNodeWithAllItsDescendants } from "./removeNodeWithAllItsDescendants";
 
 export type Data = {
   rank: number;
@@ -37,7 +37,7 @@ const App = () => {
 
         if (nodeToRemove) {
           const idsToRemove = new Set(
-            recursiveNodeRemove(nodeToRemove.id, state)
+            removeNodeWithAllItsDescendants(nodeToRemove.id, state)
           );
           return nextRanks.filter((item) => !idsToRemove.has(item.id));
         } else {
