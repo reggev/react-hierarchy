@@ -17,9 +17,7 @@ const App = () => {
   const [data, setData] = useState(rawData);
 
   const hierarchyRef = useRef<RefProps>();
-  if (hierarchyRef.current) {
-    hierarchyRef.current;
-  }
+
   const handleClick = useCallback(
     (id) => {
       console.log(id);

@@ -46,7 +46,11 @@ function Boxes<T extends Record<string, unknown>>({
   return (
     <>
       {transitions(({ transform, ...props }, item) => (
-        <animated.g style={props} transform={transform}>
+        <animated.g
+          style={props}
+          transform={transform}
+          data-testid={`group-${item.data.id}`}
+        >
           <foreignObject
             style={{ overflow: 'visible' }}
             width={dx}
