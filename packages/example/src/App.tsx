@@ -60,16 +60,12 @@ const App = () => {
 
   return (
     <div className="App">
-      <div className={styles.buttonsPanel}>
-        <button onClick={onCollapse}>collapse all</button>
-        <button onClick={zoomExtends}>zoom extends</button>
-      </div>
       <div style={{ flex: 1 }}>
         <AutoSizer>
           {({ height, width }) =>
             height === 0 || width === 0 ? null : (
               <Hierarchy
-                maxInitialDepth={3}
+                maxInitialDepth={1}
                 data={data}
                 onClick={handleClick}
                 Component={Card}
@@ -83,6 +79,14 @@ const App = () => {
             )
           }
         </AutoSizer>
+      </div>
+      <div className={styles.buttonsPanel}>
+        <button className={styles.panelButton} onClick={onCollapse}>
+          collapse all
+        </button>
+        <button className={styles.panelButton} onClick={zoomExtends}>
+          zoom extends
+        </button>
       </div>
     </div>
   );

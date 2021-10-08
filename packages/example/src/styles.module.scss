@@ -1,17 +1,45 @@
-.contentBox {
+.foreignObject {
+  overflow: visible;
+}
+
+.buttonsPanel {
+  position: absolute;
+  left: 1em;
+  top: 1em;
+}
+.buttonBase {
+  border: 1px solid #ccc;
+  border-radius: 0.5em;
+  background: white;
+  padding: 0.5em 1ch;
+  font: inherit;
+  font-size: 0.75em;
+  margin: 0;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    background: rgb(171, 234, 255);
+  }
+}
+.panelButton {
+  @extend .buttonBase;
+  margin-right: 1em;
+  box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0);
+  &:hover {
+    box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.15);
+  }
+}
+
+.node {
   display: flex;
   flex-direction: column;
   background-color: white;
   border-radius: 0.5em;
   border: 1px solid rgba(black, 0.35);
-  overflow: hidden;
   box-shadow: 0.25em 0.5em 1em rgba(black, 0.15);
+  padding: 1em;
+  padding-bottom: 2em;
+  position: relative;
 }
-
-.foreignObject {
-  overflow: visible;
-}
-
 
 [data-rank="0"] {
   background: #e94747;
@@ -31,4 +59,26 @@
 
 [data-rank="4"] {
   background: #7ae947;
+}
+
+.nodeRankButton {
+  @extend .buttonBase;
+  margin: 0 auto;
+}
+
+.toggleCollapseButton {
+  @extend .buttonBase;
+  position: absolute;
+  bottom: -1em;
+  left: 50%;
+  transform: translateX(-50%);
+  height: 2em;
+  width: 2em;
+  box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  &:hover {
+    box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0.15);
+  }
 }
