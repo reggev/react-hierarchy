@@ -10,6 +10,7 @@
     "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
   },
   "dependencies": {
+    "@reggev/react-hierarchy": "^1.0.0",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-virtualized-auto-sizer": "^1.0.6"

@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useRef, useMemo } from "react";
-import Hierarchy, { RefProps } from "@reggev/react-hierarchy-tree";
+import Hierarchy, { RefProps } from "@reggev/react-hierarchy";
 import "./App.css";
 import Card from "./Card";
 import styles from "./styles.module.scss";
@@ -75,8 +75,6 @@ const App = () => {
                 padding={{ top: 600 }}
                 height={height}
                 width={width}
-                // nodeHeight={250}
-// nodeWidth
               />
             )
           }
