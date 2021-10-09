@@ -9,6 +9,10 @@
 npm install --save react-hierarchy
 ```
 
+# example
+
+There's an example package on https://github.com/reggev/react-hierarchy
+
 ## components over configurations
 
 The idea is to provide a component that handles **layout only**, no more giant - yet limited config objects. you provide **your own** `Card` component, and `Hierarchy` will place it on an `svg` viewport for you.
