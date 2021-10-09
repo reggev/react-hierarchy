@@ -75,6 +75,8 @@ const App = () => {
                 padding={{ top: 600 }}
                 height={height}
                 width={width}
+                // nodeHeight={250}
+// nodeWidth
               />
             )
           }

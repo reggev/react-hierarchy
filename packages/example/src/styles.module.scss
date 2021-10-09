@@ -38,7 +38,6 @@
   box-shadow: 0.25em 0.5em 1em rgba(black, 0.15);
   padding: 1em;
   padding-bottom: 2em;
-  position: relative;
 }
 
 [data-rank="0"] {
@@ -68,12 +67,16 @@
 
 .toggleCollapseButton {
   @extend .buttonBase;
-  position: absolute;
-  bottom: -1em;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 2em;
-  width: 2em;
+  border-radius: 50%;
+  height: 2.5em;
+  width: 2.5em;
+  // WORKAROUND: safari has an issue with position attributes on foreign objects
+  // position relative and position absolute on safari do not match their behavior with other browsers
+  // aligning the button using negative margins instead
+  margin: 0 auto;
+  margin-top: 1.5em;
+  margin-bottom: -4em;
+
   box-shadow: 0 0.25em 0.5em rgba(0, 0, 0, 0);
   display: flex;
   justify-content: center;
