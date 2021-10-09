@@ -1,6 +1,8 @@
 {
   "name": "@reggev/react-hierarchy-tree",
   "version": "1.0.0",
+  "description": "",
+  "type": "module",
   "files": [
     "dist"
   ],
@@ -12,7 +14,15 @@
       "require": "./dist/index.umd.js"
     }
   },
-  "type": "module",
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "react",
+    "tree",
+    "hierarchy",
+    "component"
+  ],
   "types": "dist/index.d.ts",
   "scripts": {
     "dev": "vite",
@@ -24,11 +34,13 @@
     "test:coverage": "NODE_OPTIONS=--experimental-vm-modules jest --coverage"
   },
   "dependencies": {
-    "@react-spring/web": "^9.2.4",
     "d3-hierarchy": "^3.0.1",
+    "react-svg-pan-zoom": "^3.10.0",
+    "@react-spring/web": "^9.2.4"
+  },
+  "peerDependencies": {
     "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-svg-pan-zoom": "^3.10.0"
+    "react-dom": "^17.0.2"
   },
   "devDependencies": {
     "@babel/preset-react": "^7.14.5",
@@ -79,13 +91,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/reggev/react-hierarchy.git"
+    "url": "git+https://github.com/reggev/react-hierarchy.git",
+    "directory": "packages/tree"
   },
   "author": "Reggev",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/reggev/react-hierarchy/issues"
   },
-  "homepage": "https://github.com/reggev/react-hierarchy#readme",
-  "description": ""
+  "homepage": "https://github.com/reggev/react-hierarchy#readme"
 }
